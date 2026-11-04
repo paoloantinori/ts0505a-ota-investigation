@@ -5,11 +5,12 @@ A Tuya EFR32MG21 light bulb rejects unsigned custom firmware. This repository do
 This repository records a complete, reproducible attempt to replace the stock
 firmware of Lidl "Livarno Lux" TS0505A lights (E27 HG06106C, E14 HG06106B, GU10
 HG06106A, strip HG06104A; Silicon Labs EFR32MG21, module ZS3L) with custom
-firmware built from the public Tuya Zigbee SDK. Two verified OTA images were
-served to a sacrificial bulb. Both were fully downloaded (4908 blocks, about 21
-minutes) and both were rejected by the bootloader with
-`upgradeEndRequest` status 150 (`0x96 INVALID_IMAGE`). The bulb survived both
-attempts unharmed on stock firmware.
+firmware built from the public Tuya Zigbee SDK. Three verified OTA images were
+served to a sacrificial bulb. All three were fully downloaded (about 21 minutes
+each) and all three were rejected by the bootloader with `upgradeEndRequest`
+status 150 (`0x96 INVALID_IMAGE`): unsigned with internal version 1, unsigned
+with version 97 aligned everywhere, and ECDSA-signed with the Silicon Labs
+example key. The bulb survived all attempts unharmed on stock firmware.
 
 We publish everything: the build, the byte-level verification of what was
 served, the run logs, the format findings we extracted on the way, the leads we
@@ -71,15 +72,21 @@ for the light controller. Two candidates:
   `APP_INFO` tag, and the in-image `g_firmware_ver`. Inner and outer aligned,
   like production Tuya images we compared against (ZB21S3 dimmer: inner 10 =
   outer 10).
+- **v98** (`ts0505a_fw_OTA_1.2.2.bin`, SHA-256 `eadeb8a1...`, 245450 bytes):
+  v97 plus an ECDSA-P256 GBL signature, signed with the public Silabs example
+  key from `gecko_sdk/platform/common/example_signing_key.pem`. The Gecko
+  bootloader makes signature enforcement a per-build flag; if Tuya provisioned
+  the stock bootloader against the example key instead of their own, this
+  image would have passed. It did not.
 
 Serving went through Zigbee2MQTT with a local OTA index pinned to one device
 by `manufacturerName`, plus a blocker entry that answers the other seven units
 with v80 `NO_IMAGE_AVAILABLE`. Before each run we re-verified isolation for
 all eight devices over MQTT. No other unit ever started a download.
 
-## The outcome, twice
+## The outcome, three times
 
-Both candidates were downloaded completely and rejected at the end:
+All three candidates were downloaded completely and rejected at the end:
 
 - v96: full download (4908 blocks), `upgradeEndRequest` fileVersion 96,
   status 150.
@@ -87,13 +94,20 @@ Both candidates were downloaded completely and rejected at the end:
   status 150 (0x96 INVALID_IMAGE), 2026-11-04 06:08. The device echoed the
   fileVersion of our image, so it received ours, and returned to a healthy
   stock v80 state.
+- v98: same rejection, 2026-11-04 11:20, after 99.91% progress in 20m48s.
+  The device echoed fileVersion 98: it received and parsed our signed image,
+  and the example-key signature did not change the verdict.
 
-What the pair of rejections establishes, stated carefully: aligning every
-version field at 97 was not sufficient for acceptance, and a simple version
-mismatch is not confirmed as the sole cause. The status 0x96 aggregates
-several distinct parser and policy errors, so two identical statuses are two
-identical observations, not two identical mechanisms. We do not claim a
-diagnosed root cause.
+What the three rejections establish, stated carefully: aligning every
+version field at 97 was not sufficient, and signing with a key we possess was
+not sufficient either. The status 0x96 aggregates several distinct parser and
+policy errors, so three identical statuses are three identical observations,
+not three identical mechanisms. We do not claim a diagnosed root cause. The
+readings that remain consistent with all three data points: the stock
+bootloader requires signatures from a burned-in non-public Tuya key, requires
+encryption plus signature together (the wincover pattern), or the rejection
+has nothing to do with signatures at all (a vendor callback or an internal
+version register deciding first).
 
 ## What was verified byte by byte
 
@@ -173,8 +187,9 @@ None of these is a diagnosis. Each is compatible with both rejections:
 
 1. Per-build signature/encryption enforcement in the stock bootloader
    (configurable in Gecko Bootloader, default off in stock Silabs builds;
-   unknown for this product). Two unsigned, unencrypted images failing is
-   consistent with it but does not isolate it.
+   unknown for this product). Two unsigned images failing is consistent with
+   it, and so is a demo-key-signed image failing: the enforcement would check
+   against a burned-in Tuya key, not the public example key.
 2. A vendor `parser_applicationUpgradeValidCallback` rejecting on productId,
    type, or any product-specific field (the extension point exists; the stock
    implementation is not available to us).
