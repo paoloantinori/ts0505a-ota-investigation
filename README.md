@@ -5,12 +5,13 @@ A Tuya EFR32MG21 light bulb rejects unsigned custom firmware. This repository do
 This repository records a complete, reproducible attempt to replace the stock
 firmware of Lidl "Livarno Lux" TS0505A lights (E27 HG06106C, E14 HG06106B, GU10
 HG06106A, strip HG06104A; Silicon Labs EFR32MG21, module ZS3L) with custom
-firmware built from the public Tuya Zigbee SDK. Three verified OTA images were
-served to a sacrificial bulb. All three were fully downloaded (about 21 minutes
-each) and all three were rejected by the bootloader with `upgradeEndRequest`
-status 150 (`0x96 INVALID_IMAGE`): unsigned with internal version 1, unsigned
-with version 97 aligned everywhere, and ECDSA-signed with the Silicon Labs
-example key. The bulb survived all attempts unharmed on stock firmware.
+firmware built from the public Tuya Zigbee SDK. Five verified OTA images were
+served to a sacrificial bulb. All five were fully downloaded (about 21 minutes
+each) and all five were rejected by the bootloader with `upgradeEndRequest`
+status 150 (`0x96 INVALID_IMAGE`). The candidates covered: unsigned with
+internal version 1, unsigned with version 97 aligned, ECDSA-signed with the
+Silicon Labs example key, production header string, and minimum version
+increment. The bulb survived all attempts unharmed on stock firmware.
 
 We publish everything: the build, the byte-level verification of what was
 served, the run logs, the format findings we extracted on the way, the leads we
@@ -78,15 +79,19 @@ for the light controller. Two candidates:
   bootloader makes signature enforcement a per-build flag; if Tuya provisioned
   the stock bootloader against the example key instead of their own, this
   image would have passed. It did not.
+- **V-A** (headerString variant, SHA-256 `9d010b2e...`, 245378 bytes): v97 GBL
+  repackaged with production headerString `EBL sdk_route`. 12 bytes changed.
+- **V-B** (outer version 81, SHA-256 `fc953a63...`, 245378 bytes): v97 GBL
+  repackaged with OTA fileVersion 81. 1 byte changed.
 
 Serving went through Zigbee2MQTT with a local OTA index pinned to one device
 by `manufacturerName`, plus a blocker entry that answers the other seven units
 with v80 `NO_IMAGE_AVAILABLE`. Before each run we re-verified isolation for
 all eight devices over MQTT. No other unit ever started a download.
 
-## The outcome, three times
+## The outcome, five times
 
-All three candidates were downloaded completely and rejected at the end:
+All five candidates were downloaded completely and rejected at the end:
 
 - v96: full download (4908 blocks), `upgradeEndRequest` fileVersion 96,
   status 150.
@@ -97,8 +102,10 @@ All three candidates were downloaded completely and rejected at the end:
 - v98: same rejection, 2026-11-04 11:20, after 99.91% progress in 20m48s.
   The device echoed fileVersion 98: it received and parsed our signed image,
   and the example-key signature did not change the verdict.
+- V-A: same rejection, 2026-11-04 12:45. Production header string: no change.
+- V-B: same rejection, 2026-11-04 13:09. Outer version 81: no change.
 
-What the three rejections establish, stated carefully: aligning every
+What the five rejections establish, stated carefully: aligning every
 version field at 97 was not sufficient, and signing with a key we possess was
 not sufficient either. The status 0x96 aggregates several distinct parser and
 policy errors, so three identical statuses are three identical observations,
@@ -150,7 +157,10 @@ ZB21S3 dimmer) and our own builds. They may save you the week they cost us:
    proprietary Tuya marker. They are not; the GSDK magic is what you should
    expect. (This correction was forced by adversarial review and is the kind
    of error worth publishing.)
-6. Production Tuya MG21 images exist in both classes in the public index:
+6. **Production Tuya images carry `EBL ` prefix in the headerString.** ZS5
+   and wincover both carry `EBL sdk_route`. We tested replicating it; no
+   difference, but worth knowing for Tuya-compatible OTA builders.
+7. Production Tuya MG21 images exist in both classes in the public index:
    the wincover relay is encrypted and ECDSA-signed (ENC_INIT, ENC_DATA,
    SIGNATURE tags), while ZS5 and ZB21S3 are plaintext. Per-product choice is
    real at the distribution level. The Gecko Bootloader makes signature and
@@ -198,8 +208,8 @@ None of these is a diagnosis. Each is compatible with both rejections:
 4. Parser/storage context mismatch of a kind we have not enumerated.
 
 What we have excluded: container structure, GBL CRC, served-byte corruption,
-address overlap with the bootloader, and version alignment as a sufficient
-condition.
+address overlap with the bootloader, version alignment as sufficient,
+production header string as sufficient, and demo-key signing as sufficient.
 
 ## What would settle it
 
@@ -212,6 +222,8 @@ condition.
   excluded opening devices from this project, so we did not qualify this
   path. Note that a debug unlock on a locked EFR32 can mass-erase, which
   destroys the very stock image you want.
+- The Tuya Android app or developer platform APIs might expose the firmware
+  CDN structure or allow querying by PID. Not yet investigated.
 - Anyone with knowledge of Tuya's Silabs bootloader provisioning policy for
   lighting products. Issues welcome.
 
@@ -225,6 +237,9 @@ condition.
   custom firmware for Tuya Telink and some Silabs devices. Their OTA migration
   images are Telink-only (`board.mk` excludes Silabs); Silabs targets are
   flashed by wire, bootloader plus app.
+- [dzerik/zs3l-ncp-flash-over-network](https://github.com/dzerik/zs3l-ncp-flash-over-network):
+  flashed the same EFR32MG21/ZS3L chip via GPIO boot strap + UART XMODEM with
+  unsigned firmware, proving the UART path bypasses OTA policy entirely.
 - [pvvx/ZigbeeTLc](https://github.com/pvvx/ZigbeeTLc): the Telink ecosystem
   shows what open Tuya hardware looks like (BLE first flash, debug pin without
   readout protection). None of those properties hold for this bulb.
