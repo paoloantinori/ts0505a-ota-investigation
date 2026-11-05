@@ -243,6 +243,13 @@ production header string as sufficient, and demo-key signing as sufficient.
 - [pvvx/ZigbeeTLc](https://github.com/pvvx/ZigbeeTLc): the Telink ecosystem
   shows what open Tuya hardware looks like (BLE first flash, debug pin without
   readout protection). None of those properties hold for this bulb.
+- [paoloantinori/osram-lightify-fw-re](https://github.com/paoloantinori/osram-lightify-fw-re):
+  reverse engineering of the OSRAM LIGHTIFY bulbs (AC03641), which share the
+  always-on-after-power-cycle behavior. Started 2026-11-05 with the discovery
+  that the ZLL_MK-prefixed OSRAM images in the public zigbee-OTA index are
+  plaintext Cortex-M firmware. Different vendor and platform: its findings do
+  not unlock this repo's signed-image question, but the Thumb pipeline and
+  memory-layout method transfer to any plaintext OTA image.
 
 ## Repository contents
 
