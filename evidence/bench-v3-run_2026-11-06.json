@@ -1,0 +1,73 @@
+{
+ "started": 1793960947.8976839,
+ "manifest": {
+  "bulb": {
+   "friendly": "Luce_studio",
+   "ieee": "0x842e14fffe2fac09"
+  },
+  "plug": {
+   "friendly": "Presa_Lidl",
+   "ieee": "0xbc33acfffe0c24e5"
+  },
+  "cycle_budget": 8,
+  "cuts_this_run": 3,
+  "off_dwell_s": 60,
+  "min_on_dwell_s": 120,
+  "read_deadline_s": 300,
+  "response_window_s": 15,
+  "quiet_window_s": 3,
+  "record_gap_s": 20,
+  "confirm_gap_s": 10,
+  "restore_attempts": 3,
+  "global_deadline_s": 2700
+ },
+ "authorized_by": "paolo-maintainer-2026-11-06-fai-il-test-fisico",
+ "results": [
+  {
+   "trial": 1,
+   "pre_state_requested": "ON",
+   "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)",
+   "start_state": "OFF",
+   "pre_state_confirmed": "ON",
+   "read_window_open": 1793961035.4866502,
+   "announce_seen_in_window": false,
+   "first_attempt_ts": 1793961035.7889879,
+   "first_success_ts": 1793961049.179209,
+   "read1": "ON",
+   "read2": "ON",
+   "contamination_events": 0,
+   "verdict": "OBSERVED_ON"
+  },
+  {
+   "trial": 2,
+   "pre_state_requested": "OFF",
+   "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)",
+   "start_state": "ON",
+   "pre_state_confirmed": "OFF",
+   "read_window_open": 1793961284.124458,
+   "announce_seen_in_window": false,
+   "first_attempt_ts": 1793961284.4347808,
+   "first_success_ts": 1793961297.63041,
+   "read1": "ON",
+   "read2": "ON",
+   "contamination_events": 0,
+   "verdict": "OBSERVED_ON"
+  },
+  {
+   "trial": 3,
+   "pre_state_requested": "OFF",
+   "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)",
+   "start_state": "ON",
+   "pre_state_confirmed": "OFF",
+   "read_window_open": 1793961532.5938969,
+   "announce_seen_in_window": false,
+   "first_attempt_ts": 1793961532.9069262,
+   "first_success_ts": 1793961546.275294,
+   "read1": "ON",
+   "read2": "ON",
+   "contamination_events": 0,
+   "verdict": "OBSERVED_ON"
+  }
+ ],
+ "journal_path": "/Users/pantinor/Documents/tuya-zigbee-fw/evidence/livarno-bench/journal-1793960950.jsonl"
+}

@@ -1,0 +1,642 @@
+{
+ "ts": "2026-11-06T01:17:19",
+ "bulb": "Luce_studio",
+ "plug": "Presa_Lidl",
+ "trials": [
+  {
+   "trial": 1,
+   "pre_state": "ON",
+   "start_state": "ON",
+   "verified_pre": "ON",
+   "announce": false,
+   "read1": "ON",
+   "read2": "ON",
+   "set_commands_during_window": 0,
+   "verdict": "OBSERVED_ON"
+  },
+  {
+   "trial": 2,
+   "pre_state": "OFF",
+   "start_state": "ON",
+   "verified_pre": "OFF",
+   "announce": false,
+   "read1": "ON",
+   "read2": "ON",
+   "set_commands_during_window": 0,
+   "verdict": "OBSERVED_ON"
+  },
+  {
+   "trial": 3,
+   "pre_state": "OFF",
+   "start_state": "ON",
+   "verified_pre": "OFF",
+   "announce": false,
+   "read1": "ON",
+   "read2": "ON",
+   "set_commands_during_window": 0,
+   "verdict": "OBSERVED_ON"
+  }
+ ],
+ "events_tail": [
+  {
+   "t": 1793922986.391188,
+   "topic": "zigbee2mqtt/Presa_Lidl/set",
+   "payload": "{\"state\": \"OFF\"}"
+  },
+  {
+   "t": 1793922986.492758,
+   "topic": "zigbee2mqtt/Luce_studio",
+   "payload": "{\"brightness\":69,\"color\":{\"x\":0.3418,\"y\":0.3489},\"color_mode\":\"color_temp\",\"color_temp\":195,\"linkquality\":105,\"state\":\"ON\",\"update\":{\"installed_version\":80,\"latest_release_notes\":null,\"latest_source\":\"http://127.0.0.1:1/blocked.ota\",\"latest_version\":80,\"state\":\"idle\"}}"
+  },
+  {
+   "t": 1793922986.4975328,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Presa_Lidl', payload '{\\\"indicator_mode\\\":\\\"off/on\\\",\\\"linkquality\\\":102,\\\"power_on_behavior\\\":\\\"previous\\\",\\\"state\\\":\\\"OFF\\\"}'\"}"
+  },
+  {
+   "t": 1793922986.4997818,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Presa_Lidl', payload '{\\\"indicator_mode\\\":\\\"off/on\\\",\\\"linkquality\\\":102,\\\"power_on_behavior\\\":\\\"previous\\\",\\\"state\\\":\\\"OFF\\\"}'\"}"
+  },
+  {
+   "t": 1793922986.499802,
+   "topic": "zigbee2mqtt/Presa_Lidl",
+   "payload": "{\"indicator_mode\":\"off/on\",\"linkquality\":102,\"power_on_behavior\":\"previous\",\"state\":\"OFF\"}"
+  },
+  {
+   "t": 1793922986.503506,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Presa_Lidl', payload '{\\\"indicator_mode\\\":\\\"off/on\\\",\\\"linkquality\\\":109,\\\"power_on_behavior\\\":\\\"previous\\\",\\\"state\\\":\\\"OFF\\\"}'\"}"
+  },
+  {
+   "t": 1793922986.50353,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Presa_Lidl', payload '{\\\"indicator_mode\\\":\\\"off/on\\\",\\\"linkquality\\\":109,\\\"power_on_behavior\\\":\\\"previous\\\",\\\"state\\\":\\\"OFF\\\"}'\"}"
+  },
+  {
+   "t": 1793922986.505912,
+   "topic": "zigbee2mqtt/Presa_Lidl",
+   "payload": "{\"indicator_mode\":\"off/on\",\"linkquality\":109,\"power_on_behavior\":\"previous\",\"state\":\"OFF\"}"
+  },
+  {
+   "t": 1793922986.54443,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Luce_studio', payload '{\\\"brightness\\\":69,\\\"color\\\":{\\\"x\\\":0.3418,\\\"y\\\":0.3489},\\\"color_mode\\\":\\\"color_temp\\\",\\\"color_temp\\\":195,\\\"linkquality\\\":87,\\\"state\\\":\\\"ON\\\",\\\"update\\\":{\\\"installed_version\\\":80,\\\"latest_release_notes\\\":null,\\\"latest_source\\\":\\\"http://127.0.0.1:1/blocked.ota\\\",\\\"latest_version\\\":80,\\\"state\\\":\\\"idle\\\"}}'\"}"
+  },
+  {
+   "t": 1793922986.548089,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Luce_studio', payload '{\\\"brightness\\\":69,\\\"color\\\":{\\\"x\\\":0.3418,\\\"y\\\":0.3489},\\\"color_mode\\\":\\\"color_temp\\\",\\\"color_temp\\\":195,\\\"linkquality\\\":87,\\\"state\\\":\\\"ON\\\",\\\"update\\\":{\\\"installed_version\\\":80,\\\"latest_release_notes\\\":null,\\\"latest_source\\\":\\\"http://127.0.0.1:1/blocked.ota\\\",\\\"latest_version\\\":80,\\\"state\\\":\\\"idle\\\"}}'\"}"
+  },
+  {
+   "t": 1793922986.5481129,
+   "topic": "zigbee2mqtt/Luce_studio",
+   "payload": "{\"brightness\":69,\"color\":{\"x\":0.3418,\"y\":0.3489},\"color_mode\":\"color_temp\",\"color_temp\":195,\"linkquality\":87,\"state\":\"ON\",\"update\":{\"installed_version\":80,\"latest_release_notes\":null,\"latest_source\":\"http://127.0.0.1:1/blocked.ota\",\"latest_version\":80,\"state\":\"idle\"}}"
+  },
+  {
+   "t": 1793922990.216528,
+   "topic": "zigbee2mqtt/scale/get",
+   "payload": "{\"state\": \"\"}"
+  },
+  {
+   "t": 1793922990.219729,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"error\",\"message\":\"z2m: Entity 'scale' is unknown\"}"
+  },
+  {
+   "t": 1793922990.222187,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"error\",\"message\":\"z2m: Entity 'scale' is unknown\"}"
+  },
+  {
+   "t": 1793923005.256114,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"error\",\"message\":\"z2m: Publish 'get' 'state' to 'presa_smart_carico' failed: 'Error: ZCL command 0xa4c138fbe5c166f1/1 genOnOff.read([\\\"onOff\\\"], {\\\"timeout\\\":10000,\\\"disableResponse\\\":false,\\\"disableRecovery\\\":false,\\\"disableDefaultResponse\\\":true,\\\"direction\\\":0,\\\"reservedBits\\\":0,\\\"writeUndiv\\\":false}) failed (Data request failed with error: 'NWK_NO_ROUTE' (0xcd))'\"}"
+  },
+  {
+   "t": 1793923005.258137,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"error\",\"message\":\"z2m: Publish 'get' 'state' to 'presa_smart_carico' failed: 'Error: ZCL command 0xa4c138fbe5c166f1/1 genOnOff.read([\\\"onOff\\\"], {\\\"timeout\\\":10000,\\\"disableResponse\\\":false,\\\"disableRecovery\\\":false,\\\"disableDefaultResponse\\\":true,\\\"direction\\\":0,\\\"reservedBits\\\":0,\\\"writeUndiv\\\":false}) failed (Data request failed with error: 'NWK_NO_ROUTE' (0xcd))'\"}"
+  },
+  {
+   "t": 1793923046.801548,
+   "topic": "zigbee2mqtt/Presa_Lidl/set",
+   "payload": "{\"state\": \"ON\"}"
+  },
+  {
+   "t": 1793923046.9422731,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Presa_Lidl', payload '{\\\"indicator_mode\\\":\\\"off/on\\\",\\\"linkquality\\\":120,\\\"power_on_behavior\\\":\\\"previous\\\",\\\"state\\\":\\\"ON\\\"}'\"}"
+  },
+  {
+   "t": 1793923046.9451451,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Presa_Lidl', payload '{\\\"indicator_mode\\\":\\\"off/on\\\",\\\"linkquality\\\":120,\\\"power_on_behavior\\\":\\\"previous\\\",\\\"state\\\":\\\"ON\\\"}'\"}"
+  },
+  {
+   "t": 1793923046.947816,
+   "topic": "zigbee2mqtt/Presa_Lidl",
+   "payload": "{\"indicator_mode\":\"off/on\",\"linkquality\":120,\"power_on_behavior\":\"previous\",\"state\":\"ON\"}"
+  },
+  {
+   "t": 1793923046.947901,
+   "topic": "zigbee2mqtt/Presa_Lidl",
+   "payload": "{\"indicator_mode\":\"off/on\",\"linkquality\":120,\"power_on_behavior\":\"previous\",\"state\":\"ON\"}"
+  },
+  {
+   "t": 1793923162.795734,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/bridge/health', payload '{\\\"response_time\\\":1793923162784,\\\"os\\\":{\\\"load_average\\\":[1.53,0.89,0.84],\\\"memory_used_mb\\\":2432.39,\\\"memory_percent\\\":64.1232},\\\"process\\\":{\\\"uptime_sec\\\":15616,\\\"memory_used_mb\\\":152.88,\\\"memory_percent\\\":4.0301},\\\"mqtt\\\":{\\\"connected\\\":true,\\\"queued\\\":0,\\\"published\\\":752,\\\"received\\\":560},\\\"devices\\"
+  },
+  {
+   "t": 1793923162.797354,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/bridge/health', payload '{\\\"response_time\\\":1793923162784,\\\"os\\\":{\\\"load_average\\\":[1.53,0.89,0.84],\\\"memory_used_mb\\\":2432.39,\\\"memory_percent\\\":64.1232},\\\"process\\\":{\\\"uptime_sec\\\":15616,\\\"memory_used_mb\\\":152.88,\\\"memory_percent\\\":4.0301},\\\"mqtt\\\":{\\\"connected\\\":true,\\\"queued\\\":0,\\\"published\\\":752,\\\"received\\\":560},\\\"devices\\"
+  },
+  {
+   "t": 1793923162.7998562,
+   "topic": "zigbee2mqtt/bridge/health",
+   "payload": "{\"response_time\":1793923162784,\"os\":{\"load_average\":[1.53,0.89,0.84],\"memory_used_mb\":2432.39,\"memory_percent\":64.1232},\"process\":{\"uptime_sec\":15616,\"memory_used_mb\":152.88,\"memory_percent\":4.0301},\"mqtt\":{\"connected\":true,\"queued\":0,\"published\":752,\"received\":560},\"devices\":{\"0x842e14fffe15ee27\":{\"messages\":28,\"messages_per_sec\":0.0018,\"leave_count\":0,\"network_address_changes\":0},\"0x7cb03eaa00af"
+  },
+  {
+   "t": 1793923266.856417,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/philips_movimento_cantina', payload '{\\\"battery\\\":28.5,\\\"illuminance\\\":0,\\\"linkquality\\\":32,\\\"motion_sensitivity\\\":\\\"high\\\",\\\"occupancy\\\":false,\\\"occupancy_timeout\\\":0,\\\"temperature\\\":16.35,\\\"update\\\":{\\\"installed_version\\\":1124103169,\\\"latest_release_notes\\\":null,\\\"latest_source\\\":\\\"https://raw.githubusercontent.com/Koenkk/zigb"
+  },
+  {
+   "t": 1793923266.858193,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/philips_movimento_cantina', payload '{\\\"battery\\\":28.5,\\\"illuminance\\\":0,\\\"linkquality\\\":32,\\\"motion_sensitivity\\\":\\\"high\\\",\\\"occupancy\\\":false,\\\"occupancy_timeout\\\":0,\\\"temperature\\\":16.35,\\\"update\\\":{\\\"installed_version\\\":1124103169,\\\"latest_release_notes\\\":null,\\\"latest_source\\\":\\\"https://raw.githubusercontent.com/Koenkk/zigb"
+  },
+  {
+   "t": 1793923266.8625941,
+   "topic": "zigbee2mqtt/philips_movimento_cantina",
+   "payload": "{\"battery\":28.5,\"illuminance\":0,\"linkquality\":32,\"motion_sensitivity\":\"high\",\"occupancy\":false,\"occupancy_timeout\":0,\"temperature\":16.35,\"update\":{\"installed_version\":1124103169,\"latest_release_notes\":null,\"latest_source\":\"https://raw.githubusercontent.com/Koenkk/zigbee-OTA/master/images/Hue/Sensor-ATmega_0012.sbl-ota\",\"latest_version\":1124103169,\"state\":\"idle\"},\"update_available\":false}"
+  },
+  {
+   "t": 1793923307.8105521,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/philips_movimento_guardaroba', payload '{\\\"battery\\\":15.5,\\\"illuminance\\\":0,\\\"linkquality\\\":149,\\\"motion_sensitivity\\\":\\\"low\\\",\\\"motion_sensitivity_ep2\\\":\\\"high\\\",\\\"occupancy\\\":false,\\\"occupancy_timeout\\\":30,\\\"temperature\\\":17.4,\\\"update\\\":{\\\"installed_version\\\":1124103169,\\\"latest_release_notes\\\":null,\\\"latest_source\\\":\\\"https:"
+  },
+  {
+   "t": 1793923307.8123379,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/philips_movimento_guardaroba', payload '{\\\"battery\\\":15.5,\\\"illuminance\\\":0,\\\"linkquality\\\":149,\\\"motion_sensitivity\\\":\\\"low\\\",\\\"motion_sensitivity_ep2\\\":\\\"high\\\",\\\"occupancy\\\":false,\\\"occupancy_timeout\\\":30,\\\"temperature\\\":17.4,\\\"update\\\":{\\\"installed_version\\\":1124103169,\\\"latest_release_notes\\\":null,\\\"latest_source\\\":\\\"https:"
+  },
+  {
+   "t": 1793923307.8196638,
+   "topic": "zigbee2mqtt/philips_movimento_guardaroba",
+   "payload": "{\"battery\":15.5,\"illuminance\":0,\"linkquality\":149,\"motion_sensitivity\":\"low\",\"motion_sensitivity_ep2\":\"high\",\"occupancy\":false,\"occupancy_timeout\":30,\"temperature\":17.4,\"update\":{\"installed_version\":1124103169,\"latest_release_notes\":null,\"latest_source\":\"https://raw.githubusercontent.com/Koenkk/zigbee-OTA/master/images/Hue/Sensor-ATmega_0012.sbl-ota\",\"latest_version\":1124103169,\"state\":\"idle\"},\"up"
+  },
+  {
+   "t": 1793923362.2699058,
+   "topic": "zigbee2mqtt/Luce_studio/get",
+   "payload": "{\"state\": \"\"}"
+  },
+  {
+   "t": 1793923362.374914,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Luce_studio', payload '{\\\"brightness\\\":69,\\\"color\\\":{\\\"x\\\":0.3418,\\\"y\\\":0.3489},\\\"color_mode\\\":\\\"color_temp\\\",\\\"color_temp\\\":195,\\\"linkquality\\\":131,\\\"state\\\":\\\"ON\\\",\\\"update\\\":{\\\"installed_version\\\":80,\\\"latest_release_notes\\\":null,\\\"latest_source\\\":\\\"http://127.0.0.1:1/blocked.ota\\\",\\\"latest_version\\\":80,\\\"state\\\":\\\"idle\\\"}}'\""
+  },
+  {
+   "t": 1793923362.379689,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Luce_studio', payload '{\\\"brightness\\\":69,\\\"color\\\":{\\\"x\\\":0.3418,\\\"y\\\":0.3489},\\\"color_mode\\\":\\\"color_temp\\\",\\\"color_temp\\\":195,\\\"linkquality\\\":131,\\\"state\\\":\\\"ON\\\",\\\"update\\\":{\\\"installed_version\\\":80,\\\"latest_release_notes\\\":null,\\\"latest_source\\\":\\\"http://127.0.0.1:1/blocked.ota\\\",\\\"latest_version\\\":80,\\\"state\\\":\\\"idle\\\"}}'\""
+  },
+  {
+   "t": 1793923362.382085,
+   "topic": "zigbee2mqtt/Luce_studio",
+   "payload": "{\"brightness\":69,\"color\":{\"x\":0.3418,\"y\":0.3489},\"color_mode\":\"color_temp\",\"color_temp\":195,\"linkquality\":131,\"state\":\"ON\",\"update\":{\"installed_version\":80,\"latest_release_notes\":null,\"latest_source\":\"http://127.0.0.1:1/blocked.ota\",\"latest_version\":80,\"state\":\"idle\"}}"
+  },
+  {
+   "t": 1793923372.712499,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Luce_studio', payload '{\\\"brightness\\\":255,\\\"color\\\":{\\\"x\\\":0.3418,\\\"y\\\":0.3489},\\\"color_mode\\\":\\\"color_temp\\\",\\\"color_temp\\\":195,\\\"linkquality\\\":134,\\\"state\\\":\\\"ON\\\",\\\"update\\\":{\\\"installed_version\\\":80,\\\"latest_release_notes\\\":null,\\\"latest_source\\\":\\\"http://127.0.0.1:1/blocked.ota\\\",\\\"latest_version\\\":80,\\\"state\\\":\\\"idle\\\"}}'"
+  },
+  {
+   "t": 1793923372.715036,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Luce_studio', payload '{\\\"brightness\\\":255,\\\"color\\\":{\\\"x\\\":0.3418,\\\"y\\\":0.3489},\\\"color_mode\\\":\\\"color_temp\\\",\\\"color_temp\\\":195,\\\"linkquality\\\":134,\\\"state\\\":\\\"ON\\\",\\\"update\\\":{\\\"installed_version\\\":80,\\\"latest_release_notes\\\":null,\\\"latest_source\\\":\\\"http://127.0.0.1:1/blocked.ota\\\",\\\"latest_version\\\":80,\\\"state\\\":\\\"idle\\\"}}'"
+  },
+  {
+   "t": 1793923372.715105,
+   "topic": "zigbee2mqtt/Luce_studio",
+   "payload": "{\"brightness\":255,\"color\":{\"x\":0.3418,\"y\":0.3489},\"color_mode\":\"color_temp\",\"color_temp\":195,\"linkquality\":134,\"state\":\"ON\",\"update\":{\"installed_version\":80,\"latest_release_notes\":null,\"latest_source\":\"http://127.0.0.1:1/blocked.ota\",\"latest_version\":80,\"state\":\"idle\"}}"
+  },
+  {
+   "t": 1793923382.679208,
+   "topic": "zigbee2mqtt/Luce_studio/get",
+   "payload": "{\"state\": \"\"}"
+  },
+  {
+   "t": 1793923382.739548,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Luce_studio', payload '{\\\"brightness\\\":255,\\\"color\\\":{\\\"x\\\":0.3418,\\\"y\\\":0.3489},\\\"color_mode\\\":\\\"color_temp\\\",\\\"color_temp\\\":195,\\\"linkquality\\\":131,\\\"state\\\":\\\"ON\\\",\\\"update\\\":{\\\"installed_version\\\":80,\\\"latest_release_notes\\\":null,\\\"latest_source\\\":\\\"http://127.0.0.1:1/blocked.ota\\\",\\\"latest_version\\\":80,\\\"state\\\":\\\"idle\\\"}}'"
+  },
+  {
+   "t": 1793923382.742115,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Luce_studio', payload '{\\\"brightness\\\":255,\\\"color\\\":{\\\"x\\\":0.3418,\\\"y\\\":0.3489},\\\"color_mode\\\":\\\"color_temp\\\",\\\"color_temp\\\":195,\\\"linkquality\\\":131,\\\"state\\\":\\\"ON\\\",\\\"update\\\":{\\\"installed_version\\\":80,\\\"latest_release_notes\\\":null,\\\"latest_source\\\":\\\"http://127.0.0.1:1/blocked.ota\\\",\\\"latest_version\\\":80,\\\"state\\\":\\\"idle\\\"}}'"
+  },
+  {
+   "t": 1793923382.742144,
+   "topic": "zigbee2mqtt/Luce_studio",
+   "payload": "{\"brightness\":255,\"color\":{\"x\":0.3418,\"y\":0.3489},\"color_mode\":\"color_temp\",\"color_temp\":195,\"linkquality\":131,\"state\":\"ON\",\"update\":{\"installed_version\":80,\"latest_release_notes\":null,\"latest_source\":\"http://127.0.0.1:1/blocked.ota\",\"latest_version\":80,\"state\":\"idle\"}}"
+  },
+  {
+   "t": 1793923413.1021922,
+   "topic": "zigbee2mqtt/Luce_studio/get",
+   "payload": "{\"state\": \"\"}"
+  },
+  {
+   "t": 1793923413.207722,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Luce_studio', payload '{\\\"brightness\\\":255,\\\"color\\\":{\\\"x\\\":0.3418,\\\"y\\\":0.3489},\\\"color_mode\\\":\\\"color_temp\\\",\\\"color_temp\\\":195,\\\"linkquality\\\":134,\\\"state\\\":\\\"ON\\\",\\\"update\\\":{\\\"installed_version\\\":80,\\\"latest_release_notes\\\":null,\\\"latest_source\\\":\\\"http://127.0.0.1:1/blocked.ota\\\",\\\"latest_version\\\":80,\\\"state\\\":\\\"idle\\\"}}'"
+  },
+  {
+   "t": 1793923413.210336,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Luce_studio', payload '{\\\"brightness\\\":255,\\\"color\\\":{\\\"x\\\":0.3418,\\\"y\\\":0.3489},\\\"color_mode\\\":\\\"color_temp\\\",\\\"color_temp\\\":195,\\\"linkquality\\\":134,\\\"state\\\":\\\"ON\\\",\\\"update\\\":{\\\"installed_version\\\":80,\\\"latest_release_notes\\\":null,\\\"latest_source\\\":\\\"http://127.0.0.1:1/blocked.ota\\\",\\\"latest_version\\\":80,\\\"state\\\":\\\"idle\\\"}}'"
+  },
+  {
+   "t": 1793923413.210368,
+   "topic": "zigbee2mqtt/Luce_studio",
+   "payload": "{\"brightness\":255,\"color\":{\"x\":0.3418,\"y\":0.3489},\"color_mode\":\"color_temp\",\"color_temp\":195,\"linkquality\":134,\"state\":\"ON\",\"update\":{\"installed_version\":80,\"latest_release_notes\":null,\"latest_source\":\"http://127.0.0.1:1/blocked.ota\",\"latest_version\":80,\"state\":\"idle\"}}"
+  },
+  {
+   "t": 1793923413.508696,
+   "topic": "zigbee2mqtt/Luce_studio/set",
+   "payload": "{\"state\": \"OFF\"}"
+  },
+  {
+   "t": 1793923413.6045241,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Luce_studio', payload '{\\\"brightness\\\":255,\\\"color\\\":{\\\"x\\\":0.3418,\\\"y\\\":0.3489},\\\"color_mode\\\":\\\"color_temp\\\",\\\"color_temp\\\":195,\\\"linkquality\\\":134,\\\"state\\\":\\\"OFF\\\",\\\"update\\\":{\\\"installed_version\\\":80,\\\"latest_release_notes\\\":null,\\\"latest_source\\\":\\\"http://127.0.0.1:1/blocked.ota\\\",\\\"latest_version\\\":80,\\\"state\\\":\\\"idle\\\"}}"
+  },
+  {
+   "t": 1793923413.6083908,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Luce_studio', payload '{\\\"brightness\\\":255,\\\"color\\\":{\\\"x\\\":0.3418,\\\"y\\\":0.3489},\\\"color_mode\\\":\\\"color_temp\\\",\\\"color_temp\\\":195,\\\"linkquality\\\":134,\\\"state\\\":\\\"OFF\\\",\\\"update\\\":{\\\"installed_version\\\":80,\\\"latest_release_notes\\\":null,\\\"latest_source\\\":\\\"http://127.0.0.1:1/blocked.ota\\\",\\\"latest_version\\\":80,\\\"state\\\":\\\"idle\\\"}}"
+  },
+  {
+   "t": 1793923413.608426,
+   "topic": "zigbee2mqtt/Luce_studio",
+   "payload": "{\"brightness\":255,\"color\":{\"x\":0.3418,\"y\":0.3489},\"color_mode\":\"color_temp\",\"color_temp\":195,\"linkquality\":134,\"state\":\"OFF\",\"update\":{\"installed_version\":80,\"latest_release_notes\":null,\"latest_source\":\"http://127.0.0.1:1/blocked.ota\",\"latest_version\":80,\"state\":\"idle\"}}"
+  },
+  {
+   "t": 1793923413.914431,
+   "topic": "zigbee2mqtt/Luce_studio/get",
+   "payload": "{\"state\": \"\"}"
+  },
+  {
+   "t": 1793923413.920667,
+   "topic": "zigbee2mqtt/Presa_Lidl/set",
+   "payload": "{\"state\": \"OFF\"}"
+  },
+  {
+   "t": 1793923413.983514,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Luce_studio', payload '{\\\"brightness\\\":255,\\\"color\\\":{\\\"x\\\":0.3418,\\\"y\\\":0.3489},\\\"color_mode\\\":\\\"color_temp\\\",\\\"color_temp\\\":195,\\\"linkquality\\\":131,\\\"state\\\":\\\"OFF\\\",\\\"update\\\":{\\\"installed_version\\\":80,\\\"latest_release_notes\\\":null,\\\"latest_source\\\":\\\"http://127.0.0.1:1/blocked.ota\\\",\\\"latest_version\\\":80,\\\"state\\\":\\\"idle\\\"}}"
+  },
+  {
+   "t": 1793923413.986231,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Luce_studio', payload '{\\\"brightness\\\":255,\\\"color\\\":{\\\"x\\\":0.3418,\\\"y\\\":0.3489},\\\"color_mode\\\":\\\"color_temp\\\",\\\"color_temp\\\":195,\\\"linkquality\\\":131,\\\"state\\\":\\\"OFF\\\",\\\"update\\\":{\\\"installed_version\\\":80,\\\"latest_release_notes\\\":null,\\\"latest_source\\\":\\\"http://127.0.0.1:1/blocked.ota\\\",\\\"latest_version\\\":80,\\\"state\\\":\\\"idle\\\"}}"
+  },
+  {
+   "t": 1793923413.9862459,
+   "topic": "zigbee2mqtt/Luce_studio",
+   "payload": "{\"brightness\":255,\"color\":{\"x\":0.3418,\"y\":0.3489},\"color_mode\":\"color_temp\",\"color_temp\":195,\"linkquality\":131,\"state\":\"OFF\",\"update\":{\"installed_version\":80,\"latest_release_notes\":null,\"latest_source\":\"http://127.0.0.1:1/blocked.ota\",\"latest_version\":80,\"state\":\"idle\"}}"
+  },
+  {
+   "t": 1793923414.05483,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Presa_Lidl', payload '{\\\"indicator_mode\\\":\\\"off/on\\\",\\\"linkquality\\\":131,\\\"power_on_behavior\\\":\\\"previous\\\",\\\"state\\\":\\\"OFF\\\"}'\"}"
+  },
+  {
+   "t": 1793923414.057364,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Presa_Lidl', payload '{\\\"indicator_mode\\\":\\\"off/on\\\",\\\"linkquality\\\":131,\\\"power_on_behavior\\\":\\\"previous\\\",\\\"state\\\":\\\"OFF\\\"}'\"}"
+  },
+  {
+   "t": 1793923414.061905,
+   "topic": "zigbee2mqtt/Presa_Lidl",
+   "payload": "{\"indicator_mode\":\"off/on\",\"linkquality\":131,\"power_on_behavior\":\"previous\",\"state\":\"OFF\"}"
+  },
+  {
+   "t": 1793923414.0645518,
+   "topic": "zigbee2mqtt/Presa_Lidl",
+   "payload": "{\"indicator_mode\":\"off/on\",\"linkquality\":131,\"power_on_behavior\":\"previous\",\"state\":\"OFF\"}"
+  },
+  {
+   "t": 1793923474.327509,
+   "topic": "zigbee2mqtt/Presa_Lidl/set",
+   "payload": "{\"state\": \"ON\"}"
+  },
+  {
+   "t": 1793923474.44512,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Presa_Lidl', payload '{\\\"indicator_mode\\\":\\\"off/on\\\",\\\"linkquality\\\":105,\\\"power_on_behavior\\\":\\\"previous\\\",\\\"state\\\":\\\"ON\\\"}'\"}"
+  },
+  {
+   "t": 1793923474.44786,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Presa_Lidl', payload '{\\\"indicator_mode\\\":\\\"off/on\\\",\\\"linkquality\\\":105,\\\"power_on_behavior\\\":\\\"previous\\\",\\\"state\\\":\\\"ON\\\"}'\"}"
+  },
+  {
+   "t": 1793923474.447943,
+   "topic": "zigbee2mqtt/Presa_Lidl",
+   "payload": "{\"indicator_mode\":\"off/on\",\"linkquality\":105,\"power_on_behavior\":\"previous\",\"state\":\"ON\"}"
+  },
+  {
+   "t": 1793923474.450489,
+   "topic": "zigbee2mqtt/Presa_Lidl",
+   "payload": "{\"indicator_mode\":\"off/on\",\"linkquality\":105,\"power_on_behavior\":\"previous\",\"state\":\"ON\"}"
+  },
+  {
+   "t": 1793923762.8059251,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/bridge/health', payload '{\\\"response_time\\\":1793923762794,\\\"os\\\":{\\\"load_average\\\":[1.36,1,0.91],\\\"memory_used_mb\\\":2335.67,\\\"memory_percent\\\":61.5734},\\\"process\\\":{\\\"uptime_sec\\\":16216,\\\"memory_used_mb\\\":153.02,\\\"memory_percent\\\":4.0338},\\\"mqtt\\\":{\\\"connected\\\":true,\\\"queued\\\":0,\\\"published\\\":776,\\\"received\\\":567},\\\"devices\\\":{"
+  },
+  {
+   "t": 1793923762.808704,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/bridge/health', payload '{\\\"response_time\\\":1793923762794,\\\"os\\\":{\\\"load_average\\\":[1.36,1,0.91],\\\"memory_used_mb\\\":2335.67,\\\"memory_percent\\\":61.5734},\\\"process\\\":{\\\"uptime_sec\\\":16216,\\\"memory_used_mb\\\":153.02,\\\"memory_percent\\\":4.0338},\\\"mqtt\\\":{\\\"connected\\\":true,\\\"queued\\\":0,\\\"published\\\":776,\\\"received\\\":567},\\\"devices\\\":{"
+  },
+  {
+   "t": 1793923762.810624,
+   "topic": "zigbee2mqtt/bridge/health",
+   "payload": "{\"response_time\":1793923762794,\"os\":{\"load_average\":[1.36,1,0.91],\"memory_used_mb\":2335.67,\"memory_percent\":61.5734},\"process\":{\"uptime_sec\":16216,\"memory_used_mb\":153.02,\"memory_percent\":4.0338},\"mqtt\":{\"connected\":true,\"queued\":0,\"published\":776,\"received\":567},\"devices\":{\"0x842e14fffe15ee27\":{\"messages\":29,\"messages_per_sec\":0.0018,\"leave_count\":0,\"network_address_changes\":0},\"0x7cb03eaa00afa9d"
+  },
+  {
+   "t": 1793923790.2323258,
+   "topic": "zigbee2mqtt/Luce_studio/get",
+   "payload": "{\"state\": \"\"}"
+  },
+  {
+   "t": 1793923790.333631,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Luce_studio', payload '{\\\"brightness\\\":255,\\\"color\\\":{\\\"x\\\":0.3418,\\\"y\\\":0.3489},\\\"color_mode\\\":\\\"color_temp\\\",\\\"color_temp\\\":195,\\\"linkquality\\\":120,\\\"state\\\":\\\"ON\\\",\\\"update\\\":{\\\"installed_version\\\":80,\\\"latest_release_notes\\\":null,\\\"latest_source\\\":\\\"http://127.0.0.1:1/blocked.ota\\\",\\\"latest_version\\\":80,\\\"state\\\":\\\"idle\\\"}}'"
+  },
+  {
+   "t": 1793923790.336351,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Luce_studio', payload '{\\\"brightness\\\":255,\\\"color\\\":{\\\"x\\\":0.3418,\\\"y\\\":0.3489},\\\"color_mode\\\":\\\"color_temp\\\",\\\"color_temp\\\":195,\\\"linkquality\\\":120,\\\"state\\\":\\\"ON\\\",\\\"update\\\":{\\\"installed_version\\\":80,\\\"latest_release_notes\\\":null,\\\"latest_source\\\":\\\"http://127.0.0.1:1/blocked.ota\\\",\\\"latest_version\\\":80,\\\"state\\\":\\\"idle\\\"}}'"
+  },
+  {
+   "t": 1793923790.340236,
+   "topic": "zigbee2mqtt/Luce_studio",
+   "payload": "{\"brightness\":255,\"color\":{\"x\":0.3418,\"y\":0.3489},\"color_mode\":\"color_temp\",\"color_temp\":195,\"linkquality\":120,\"state\":\"ON\",\"update\":{\"installed_version\":80,\"latest_release_notes\":null,\"latest_source\":\"http://127.0.0.1:1/blocked.ota\",\"latest_version\":80,\"state\":\"idle\"}}"
+  },
+  {
+   "t": 1793923810.6484191,
+   "topic": "zigbee2mqtt/Luce_studio/get",
+   "payload": "{\"state\": \"\"}"
+  },
+  {
+   "t": 1793923810.695308,
+   "topic": "zigbee2mqtt/Luce_studio",
+   "payload": "{\"brightness\":255,\"color\":{\"x\":0.3418,\"y\":0.3489},\"color_mode\":\"color_temp\",\"color_temp\":195,\"linkquality\":120,\"state\":\"ON\",\"update\":{\"installed_version\":80,\"latest_release_notes\":null,\"latest_source\":\"http://127.0.0.1:1/blocked.ota\",\"latest_version\":80,\"state\":\"idle\"}}"
+  },
+  {
+   "t": 1793923841.069601,
+   "topic": "zigbee2mqtt/Luce_studio/get",
+   "payload": "{\"state\": \"\"}"
+  },
+  {
+   "t": 1793923841.164358,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Luce_studio', payload '{\\\"brightness\\\":255,\\\"color\\\":{\\\"x\\\":0.3418,\\\"y\\\":0.3489},\\\"color_mode\\\":\\\"color_temp\\\",\\\"color_temp\\\":195,\\\"linkquality\\\":123,\\\"state\\\":\\\"ON\\\",\\\"update\\\":{\\\"installed_version\\\":80,\\\"latest_release_notes\\\":null,\\\"latest_source\\\":\\\"http://127.0.0.1:1/blocked.ota\\\",\\\"latest_version\\\":80,\\\"state\\\":\\\"idle\\\"}}'"
+  },
+  {
+   "t": 1793923841.167252,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Luce_studio', payload '{\\\"brightness\\\":255,\\\"color\\\":{\\\"x\\\":0.3418,\\\"y\\\":0.3489},\\\"color_mode\\\":\\\"color_temp\\\",\\\"color_temp\\\":195,\\\"linkquality\\\":123,\\\"state\\\":\\\"ON\\\",\\\"update\\\":{\\\"installed_version\\\":80,\\\"latest_release_notes\\\":null,\\\"latest_source\\\":\\\"http://127.0.0.1:1/blocked.ota\\\",\\\"latest_version\\\":80,\\\"state\\\":\\\"idle\\\"}}'"
+  },
+  {
+   "t": 1793923841.167285,
+   "topic": "zigbee2mqtt/Luce_studio",
+   "payload": "{\"brightness\":255,\"color\":{\"x\":0.3418,\"y\":0.3489},\"color_mode\":\"color_temp\",\"color_temp\":195,\"linkquality\":123,\"state\":\"ON\",\"update\":{\"installed_version\":80,\"latest_release_notes\":null,\"latest_source\":\"http://127.0.0.1:1/blocked.ota\",\"latest_version\":80,\"state\":\"idle\"}}"
+  },
+  {
+   "t": 1793923841.484703,
+   "topic": "zigbee2mqtt/Luce_studio/set",
+   "payload": "{\"state\": \"OFF\"}"
+  },
+  {
+   "t": 1793923841.572012,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Luce_studio', payload '{\\\"brightness\\\":255,\\\"color\\\":{\\\"x\\\":0.3418,\\\"y\\\":0.3489},\\\"color_mode\\\":\\\"color_temp\\\",\\\"color_temp\\\":195,\\\"linkquality\\\":123,\\\"state\\\":\\\"OFF\\\",\\\"update\\\":{\\\"installed_version\\\":80,\\\"latest_release_notes\\\":null,\\\"latest_source\\\":\\\"http://127.0.0.1:1/blocked.ota\\\",\\\"latest_version\\\":80,\\\"state\\\":\\\"idle\\\"}}"
+  },
+  {
+   "t": 1793923841.574403,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Luce_studio', payload '{\\\"brightness\\\":255,\\\"color\\\":{\\\"x\\\":0.3418,\\\"y\\\":0.3489},\\\"color_mode\\\":\\\"color_temp\\\",\\\"color_temp\\\":195,\\\"linkquality\\\":123,\\\"state\\\":\\\"OFF\\\",\\\"update\\\":{\\\"installed_version\\\":80,\\\"latest_release_notes\\\":null,\\\"latest_source\\\":\\\"http://127.0.0.1:1/blocked.ota\\\",\\\"latest_version\\\":80,\\\"state\\\":\\\"idle\\\"}}"
+  },
+  {
+   "t": 1793923841.574429,
+   "topic": "zigbee2mqtt/Luce_studio",
+   "payload": "{\"brightness\":255,\"color\":{\"x\":0.3418,\"y\":0.3489},\"color_mode\":\"color_temp\",\"color_temp\":195,\"linkquality\":123,\"state\":\"OFF\",\"update\":{\"installed_version\":80,\"latest_release_notes\":null,\"latest_source\":\"http://127.0.0.1:1/blocked.ota\",\"latest_version\":80,\"state\":\"idle\"}}"
+  },
+  {
+   "t": 1793923841.885781,
+   "topic": "zigbee2mqtt/Luce_studio/get",
+   "payload": "{\"state\": \"\"}"
+  },
+  {
+   "t": 1793923841.8915682,
+   "topic": "zigbee2mqtt/Presa_Lidl/set",
+   "payload": "{\"state\": \"OFF\"}"
+  },
+  {
+   "t": 1793923841.949538,
+   "topic": "zigbee2mqtt/Luce_studio",
+   "payload": "{\"brightness\":255,\"color\":{\"x\":0.3418,\"y\":0.3489},\"color_mode\":\"color_temp\",\"color_temp\":195,\"linkquality\":123,\"state\":\"OFF\",\"update\":{\"installed_version\":80,\"latest_release_notes\":null,\"latest_source\":\"http://127.0.0.1:1/blocked.ota\",\"latest_version\":80,\"state\":\"idle\"}}"
+  },
+  {
+   "t": 1793923842.020339,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Presa_Lidl', payload '{\\\"indicator_mode\\\":\\\"off/on\\\",\\\"linkquality\\\":105,\\\"power_on_behavior\\\":\\\"previous\\\",\\\"state\\\":\\\"OFF\\\"}'\"}"
+  },
+  {
+   "t": 1793923842.022397,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Presa_Lidl', payload '{\\\"indicator_mode\\\":\\\"off/on\\\",\\\"linkquality\\\":105,\\\"power_on_behavior\\\":\\\"previous\\\",\\\"state\\\":\\\"OFF\\\"}'\"}"
+  },
+  {
+   "t": 1793923842.0278258,
+   "topic": "zigbee2mqtt/Presa_Lidl",
+   "payload": "{\"indicator_mode\":\"off/on\",\"linkquality\":105,\"power_on_behavior\":\"previous\",\"state\":\"OFF\"}"
+  },
+  {
+   "t": 1793923842.030158,
+   "topic": "zigbee2mqtt/Presa_Lidl",
+   "payload": "{\"indicator_mode\":\"off/on\",\"linkquality\":105,\"power_on_behavior\":\"previous\",\"state\":\"OFF\"}"
+  },
+  {
+   "t": 1793923902.301239,
+   "topic": "zigbee2mqtt/Presa_Lidl/set",
+   "payload": "{\"state\": \"ON\"}"
+  },
+  {
+   "t": 1793923902.410958,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Presa_Lidl', payload '{\\\"indicator_mode\\\":\\\"off/on\\\",\\\"linkquality\\\":109,\\\"power_on_behavior\\\":\\\"previous\\\",\\\"state\\\":\\\"ON\\\"}'\"}"
+  },
+  {
+   "t": 1793923902.4131641,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Presa_Lidl', payload '{\\\"indicator_mode\\\":\\\"off/on\\\",\\\"linkquality\\\":109,\\\"power_on_behavior\\\":\\\"previous\\\",\\\"state\\\":\\\"ON\\\"}'\"}"
+  },
+  {
+   "t": 1793923902.413225,
+   "topic": "zigbee2mqtt/Presa_Lidl",
+   "payload": "{\"indicator_mode\":\"off/on\",\"linkquality\":109,\"power_on_behavior\":\"previous\",\"state\":\"ON\"}"
+  },
+  {
+   "t": 1793923902.418265,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Presa_Lidl', payload '{\\\"indicator_mode\\\":\\\"off/on\\\",\\\"linkquality\\\":105,\\\"power_on_behavior\\\":\\\"previous\\\",\\\"state\\\":\\\"ON\\\"}'\"}"
+  },
+  {
+   "t": 1793923902.4183328,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Presa_Lidl', payload '{\\\"indicator_mode\\\":\\\"off/on\\\",\\\"linkquality\\\":105,\\\"power_on_behavior\\\":\\\"previous\\\",\\\"state\\\":\\\"ON\\\"}'\"}"
+  },
+  {
+   "t": 1793923902.418389,
+   "topic": "zigbee2mqtt/Presa_Lidl",
+   "payload": "{\"indicator_mode\":\"off/on\",\"linkquality\":105,\"power_on_behavior\":\"previous\",\"state\":\"ON\"}"
+  },
+  {
+   "t": 1793923909.437671,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Telecomando_Philips', payload '{\\\"battery\\\":44.5,\\\"brightness\\\":159,\\\"counter\\\":1,\\\"linkquality\\\":102,\\\"update\\\":{\\\"installed_version\\\":1124103169,\\\"latest_release_notes\\\":null,\\\"latest_source\\\":\\\"https://raw.githubusercontent.com/Koenkk/zigbee-OTA/master/images/Hue/Switch-ATmega_0012.sbl-ota\\\",\\\"latest_version\\\":1124103169,\\\"st"
+  },
+  {
+   "t": 1793923909.44013,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Telecomando_Philips', payload '{\\\"battery\\\":44.5,\\\"brightness\\\":159,\\\"counter\\\":1,\\\"linkquality\\\":102,\\\"update\\\":{\\\"installed_version\\\":1124103169,\\\"latest_release_notes\\\":null,\\\"latest_source\\\":\\\"https://raw.githubusercontent.com/Koenkk/zigbee-OTA/master/images/Hue/Switch-ATmega_0012.sbl-ota\\\",\\\"latest_version\\\":1124103169,\\\"st"
+  },
+  {
+   "t": 1793923909.449922,
+   "topic": "zigbee2mqtt/Telecomando_Philips",
+   "payload": "{\"battery\":44.5,\"brightness\":159,\"counter\":1,\"linkquality\":102,\"update\":{\"installed_version\":1124103169,\"latest_release_notes\":null,\"latest_source\":\"https://raw.githubusercontent.com/Koenkk/zigbee-OTA/master/images/Hue/Switch-ATmega_0012.sbl-ota\",\"latest_version\":1124103169,\"state\":\"idle\"},\"update_available\":false}"
+  },
+  {
+   "t": 1793923994.898865,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/osram_guardaroba_2', payload '{\\\"brightness\\\":1,\\\"level_config\\\":{\\\"on_level\\\":\\\"previous\\\"},\\\"linkquality\\\":102,\\\"osram_attrs\\\":\\\"{\\\\\\\"4\\\\\\\":1,\\\\\\\"5\\\\\\\":0,\\\\\\\"6\\\\\\\":3,\\\\\\\"7\\\\\\\":1}\\\",\\\"osram_basic\\\":\\\"{\\\\\\\"appVersion\\\\\\\":16,\\\\\\\"dateCode\\\\\\\":\\\\\\\"20140331CNEF****\\\\\\\",\\\\\\\"swBuildId\\\\\\\":\\\\\\\"V1.05.10\\\\\\\"}\\\",\\\"osram_ota_query\\\":\\\"{\\\\\\"
+  },
+  {
+   "t": 1793923994.900234,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/osram_guardaroba_2', payload '{\\\"brightness\\\":1,\\\"level_config\\\":{\\\"on_level\\\":\\\"previous\\\"},\\\"linkquality\\\":102,\\\"osram_attrs\\\":\\\"{\\\\\\\"4\\\\\\\":1,\\\\\\\"5\\\\\\\":0,\\\\\\\"6\\\\\\\":3,\\\\\\\"7\\\\\\\":1}\\\",\\\"osram_basic\\\":\\\"{\\\\\\\"appVersion\\\\\\\":16,\\\\\\\"dateCode\\\\\\\":\\\\\\\"20140331CNEF****\\\\\\\",\\\\\\\"swBuildId\\\\\\\":\\\\\\\"V1.05.10\\\\\\\"}\\\",\\\"osram_ota_query\\\":\\\"{\\\\\\"
+  },
+  {
+   "t": 1793923994.906529,
+   "topic": "zigbee2mqtt/osram_guardaroba_2",
+   "payload": "{\"brightness\":1,\"level_config\":{\"on_level\":\"previous\"},\"linkquality\":102,\"osram_attrs\":\"{\\\"4\\\":1,\\\"5\\\":0,\\\"6\\\":3,\\\"7\\\":1}\",\"osram_basic\":\"{\\\"appVersion\\\":16,\\\"dateCode\\\":\\\"20140331CNEF****\\\",\\\"swBuildId\\\":\\\"V1.05.10\\\"}\",\"osram_ota_query\":\"{\\\"fileVersion\\\":16909584,\\\"manufacturerCode\\\":4364,\\\"imageType\\\":19}\",\"osram_ota_ver\":\"error: ZCL command 0x7cb03eaa00afa9df/3 genOta.read([2], {\\\"timeout\\\":100"
+  },
+  {
+   "t": 1793923994.978391,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/osram_guardaroba_1', payload '{\\\"brightness\\\":254,\\\"level_config\\\":{\\\"on_level\\\":\\\"previous\\\"},\\\"linkquality\\\":131,\\\"osram_attrs\\\":\\\"{\\\\\\\"4\\\\\\\":1,\\\\\\\"5\\\\\\\":1,\\\\\\\"6\\\\\\\":3,\\\\\\\"7\\\\\\\":1}\\\",\\\"osram_basic\\\":\\\"{\\\\\\\"appVersion\\\\\\\":16,\\\\\\\"dateCode\\\\\\\":\\\\\\\"20140331CNEF****\\\\\\\",\\\\\\\"swBuildId\\\\\\\":\\\\\\\"V1.05.10\\\\\\\"}\\\",\\\"osram_ota_query\\\":\\\"{\\"
+  },
+  {
+   "t": 1793923994.9807308,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/osram_guardaroba_1', payload '{\\\"brightness\\\":254,\\\"level_config\\\":{\\\"on_level\\\":\\\"previous\\\"},\\\"linkquality\\\":131,\\\"osram_attrs\\\":\\\"{\\\\\\\"4\\\\\\\":1,\\\\\\\"5\\\\\\\":1,\\\\\\\"6\\\\\\\":3,\\\\\\\"7\\\\\\\":1}\\\",\\\"osram_basic\\\":\\\"{\\\\\\\"appVersion\\\\\\\":16,\\\\\\\"dateCode\\\\\\\":\\\\\\\"20140331CNEF****\\\\\\\",\\\\\\\"swBuildId\\\\\\\":\\\\\\\"V1.05.10\\\\\\\"}\\\",\\\"osram_ota_query\\\":\\\"{\\"
+  },
+  {
+   "t": 1793923994.98493,
+   "topic": "zigbee2mqtt/osram_guardaroba_1",
+   "payload": "{\"brightness\":254,\"level_config\":{\"on_level\":\"previous\"},\"linkquality\":131,\"osram_attrs\":\"{\\\"4\\\":1,\\\"5\\\":1,\\\"6\\\":3,\\\"7\\\":1}\",\"osram_basic\":\"{\\\"appVersion\\\":16,\\\"dateCode\\\":\\\"20140331CNEF****\\\",\\\"swBuildId\\\":\\\"V1.05.10\\\"}\",\"osram_ota_query\":\"{\\\"fileVersion\\\":16909584,\\\"manufacturerCode\\\":4364,\\\"imageType\\\":19}\",\"osram_ota_ver\":\"error: ZCL command 0x7cb03eaa00af8786/3 genOta.read([2], {\\\"timeout\\\":1"
+  },
+  {
+   "t": 1793924168.209345,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/osram_cantina', payload '{\\\"brightness\\\":254,\\\"level_config\\\":{\\\"on_level\\\":\\\"previous\\\"},\\\"linkquality\\\":51,\\\"osram_attrs\\\":\\\"{\\\\\\\"4\\\\\\\":1,\\\\\\\"5\\\\\\\":0,\\\\\\\"6\\\\\\\":3,\\\\\\\"7\\\\\\\":1}\\\",\\\"osram_basic\\\":\\\"{\\\\\\\"appVersion\\\\\\\":16,\\\\\\\"dateCode\\\\\\\":\\\\\\\"20140331CNEF****\\\\\\\",\\\\\\\"swBuildId\\\\\\\":\\\\\\\"V1.05.10\\\\\\\"}\\\",\\\"osram_ota_query\\\":\\\"{\\\\\\\"fil"
+  },
+  {
+   "t": 1793924168.213227,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/osram_cantina', payload '{\\\"brightness\\\":254,\\\"level_config\\\":{\\\"on_level\\\":\\\"previous\\\"},\\\"linkquality\\\":51,\\\"osram_attrs\\\":\\\"{\\\\\\\"4\\\\\\\":1,\\\\\\\"5\\\\\\\":0,\\\\\\\"6\\\\\\\":3,\\\\\\\"7\\\\\\\":1}\\\",\\\"osram_basic\\\":\\\"{\\\\\\\"appVersion\\\\\\\":16,\\\\\\\"dateCode\\\\\\\":\\\\\\\"20140331CNEF****\\\\\\\",\\\\\\\"swBuildId\\\\\\\":\\\\\\\"V1.05.10\\\\\\\"}\\\",\\\"osram_ota_query\\\":\\\"{\\\\\\\"fil"
+  },
+  {
+   "t": 1793924168.213592,
+   "topic": "zigbee2mqtt/osram_cantina",
+   "payload": "{\"brightness\":254,\"level_config\":{\"on_level\":\"previous\"},\"linkquality\":51,\"osram_attrs\":\"{\\\"4\\\":1,\\\"5\\\":0,\\\"6\\\":3,\\\"7\\\":1}\",\"osram_basic\":\"{\\\"appVersion\\\":16,\\\"dateCode\\\":\\\"20140331CNEF****\\\",\\\"swBuildId\\\":\\\"V1.05.10\\\"}\",\"osram_ota_query\":\"{\\\"fileVersion\\\":16909584,\\\"manufacturerCode\\\":4364,\\\"imageType\\\":19}\",\"osram_raw_last\":0,\"osram_set_last\":\"12:1\",\"state\":\"OFF\",\"update\":{\"installed_version\":16"
+  },
+  {
+   "t": 1793924217.9018,
+   "topic": "zigbee2mqtt/Luce_studio/get",
+   "payload": "{\"state\": \"\"}"
+  },
+  {
+   "t": 1793924217.996128,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Luce_studio', payload '{\\\"brightness\\\":255,\\\"color\\\":{\\\"x\\\":0.3418,\\\"y\\\":0.3489},\\\"color_mode\\\":\\\"color_temp\\\",\\\"color_temp\\\":195,\\\"linkquality\\\":120,\\\"state\\\":\\\"ON\\\",\\\"update\\\":{\\\"installed_version\\\":80,\\\"latest_release_notes\\\":null,\\\"latest_source\\\":\\\"http://127.0.0.1:1/blocked.ota\\\",\\\"latest_version\\\":80,\\\"state\\\":\\\"idle\\\"}}'"
+  },
+  {
+   "t": 1793924217.998255,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Luce_studio', payload '{\\\"brightness\\\":255,\\\"color\\\":{\\\"x\\\":0.3418,\\\"y\\\":0.3489},\\\"color_mode\\\":\\\"color_temp\\\",\\\"color_temp\\\":195,\\\"linkquality\\\":120,\\\"state\\\":\\\"ON\\\",\\\"update\\\":{\\\"installed_version\\\":80,\\\"latest_release_notes\\\":null,\\\"latest_source\\\":\\\"http://127.0.0.1:1/blocked.ota\\\",\\\"latest_version\\\":80,\\\"state\\\":\\\"idle\\\"}}'"
+  },
+  {
+   "t": 1793924218.006207,
+   "topic": "zigbee2mqtt/Luce_studio",
+   "payload": "{\"brightness\":255,\"color\":{\"x\":0.3418,\"y\":0.3489},\"color_mode\":\"color_temp\",\"color_temp\":195,\"linkquality\":120,\"state\":\"ON\",\"update\":{\"installed_version\":80,\"latest_release_notes\":null,\"latest_source\":\"http://127.0.0.1:1/blocked.ota\",\"latest_version\":80,\"state\":\"idle\"}}"
+  },
+  {
+   "t": 1793924238.308161,
+   "topic": "zigbee2mqtt/Luce_studio/get",
+   "payload": "{\"state\": \"\"}"
+  },
+  {
+   "t": 1793924238.357234,
+   "topic": "zigbee2mqtt/Luce_studio",
+   "payload": "{\"brightness\":255,\"color\":{\"x\":0.3418,\"y\":0.3489},\"color_mode\":\"color_temp\",\"color_temp\":195,\"linkquality\":120,\"state\":\"ON\",\"update\":{\"installed_version\":80,\"latest_release_notes\":null,\"latest_source\":\"http://127.0.0.1:1/blocked.ota\",\"latest_version\":80,\"state\":\"idle\"}}"
+  },
+  {
+   "t": 1793924238.728862,
+   "topic": "zigbee2mqtt/Presa_Lidl/set",
+   "payload": "{\"state\": \"ON\"}"
+  },
+  {
+   "t": 1793924238.8307478,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Presa_Lidl', payload '{\\\"indicator_mode\\\":\\\"off/on\\\",\\\"linkquality\\\":109,\\\"power_on_behavior\\\":\\\"previous\\\",\\\"state\\\":\\\"ON\\\"}'\"}"
+  },
+  {
+   "t": 1793924238.833442,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Presa_Lidl', payload '{\\\"indicator_mode\\\":\\\"off/on\\\",\\\"linkquality\\\":109,\\\"power_on_behavior\\\":\\\"previous\\\",\\\"state\\\":\\\"ON\\\"}'\"}"
+  },
+  {
+   "t": 1793924238.83763,
+   "topic": "zigbee2mqtt/Presa_Lidl",
+   "payload": "{\"indicator_mode\":\"off/on\",\"linkquality\":109,\"power_on_behavior\":\"previous\",\"state\":\"ON\"}"
+  },
+  {
+   "t": 1793924239.131138,
+   "topic": "zigbee2mqtt/Luce_studio/set",
+   "payload": "{\"state\": \"OFF\"}"
+  },
+  {
+   "t": 1793924239.213297,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Luce_studio', payload '{\\\"brightness\\\":255,\\\"color\\\":{\\\"x\\\":0.3418,\\\"y\\\":0.3489},\\\"color_mode\\\":\\\"color_temp\\\",\\\"color_temp\\\":195,\\\"linkquality\\\":120,\\\"state\\\":\\\"OFF\\\",\\\"update\\\":{\\\"installed_version\\\":80,\\\"latest_release_notes\\\":null,\\\"latest_source\\\":\\\"http://127.0.0.1:1/blocked.ota\\\",\\\"latest_version\\\":80,\\\"state\\\":\\\"idle\\\"}}"
+  },
+  {
+   "t": 1793924239.216485,
+   "topic": "zigbee2mqtt/bridge/logging",
+   "payload": "{\"level\":\"info\",\"message\":\"z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/Luce_studio', payload '{\\\"brightness\\\":255,\\\"color\\\":{\\\"x\\\":0.3418,\\\"y\\\":0.3489},\\\"color_mode\\\":\\\"color_temp\\\",\\\"color_temp\\\":195,\\\"linkquality\\\":120,\\\"state\\\":\\\"OFF\\\",\\\"update\\\":{\\\"installed_version\\\":80,\\\"latest_release_notes\\\":null,\\\"latest_source\\\":\\\"http://127.0.0.1:1/blocked.ota\\\",\\\"latest_version\\\":80,\\\"state\\\":\\\"idle\\\"}}"
+  },
+  {
+   "t": 1793924239.216504,
+   "topic": "zigbee2mqtt/Luce_studio",
+   "payload": "{\"brightness\":255,\"color\":{\"x\":0.3418,\"y\":0.3489},\"color_mode\":\"color_temp\",\"color_temp\":195,\"linkquality\":120,\"state\":\"OFF\",\"update\":{\"installed_version\":80,\"latest_release_notes\":null,\"latest_source\":\"http://127.0.0.1:1/blocked.ota\",\"latest_version\":80,\"state\":\"idle\"}}"
+  }
+ ]
+}

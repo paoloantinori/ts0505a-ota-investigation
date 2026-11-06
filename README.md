@@ -89,6 +89,22 @@ by `manufacturerName`, plus a blocker entry that answers the other seven units
 with v80 `NO_IMAGE_AVAILABLE`. Before each run we re-verified isolation for
 all eight devices over MQTT. No other unit ever started a download.
 
+## The bench: the stock behavior measured, not assumed
+
+With every firmware route closed, we measured the actual power-on behavior on
+an automated bench: the sacrificial bulb powered through a smart plug, six
+mains cuts total, MQTT reads correlated to the cut ordering. Every cut with a
+verified pre-cut OFF state (four of six) still came back ON at restore. The
+observation is consistent and repeated, though deliberately classified as
+observational rather than formal proof (the MQTT boundary cannot carry ZCL
+readResponse provenance). Full write-up with the runner's own review history
+(two versions rejected by adversarial review before the third was trusted, all
+counterexamples published):
+[analysis/bench-power-on-behavior_2026-11-06.md](analysis/bench-power-on-behavior_2026-11-06.md).
+Practical consequence: there is no hidden power-on setting reachable from the
+outside; the blackout nuisance is an automation problem, not a firmware
+setting.
+
 ## The outcome, five times
 
 All five candidates were downloaded completely and rejected at the end:
@@ -256,9 +272,12 @@ production header string as sufficient, and demo-key signing as sufficient.
 - `evidence/` the verification battery (`verify_v97_build.py`), the post-link
   version patcher (`patch_v97_inner_version.py`), and the filtered run logs
   of both rejected updates.
+- `evidence/bench-*.json*` the smart-plug bench runs: the superseded first
+  night (kept immutable), the final run export, and its append-only journal.
 - `analysis/` the investigation write-ups, including the adversarial review
   that corrected our own claims (kept verbatim on purpose). The write-ups are
-  in Italian; this README carries their essential findings in English.
+  in Italian; this README carries their essential findings in English. The
+  bench write-up is in English.
 
 Reproduction: the battery is baseline-pinned to the published v96 hashes and
 fails loudly if fed the wrong baseline or an unpatched ELF (there is a

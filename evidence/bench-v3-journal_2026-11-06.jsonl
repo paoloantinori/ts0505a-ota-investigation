@@ -1,0 +1,73 @@
+{"recorded_at": 1793960950.963378, "kind": "journal_opened", "path": "/Users/pantinor/Documents/tuya-zigbee-fw/evidence/livarno-bench/journal-1793960950.jsonl"}
+{"recorded_at": 1793960950.963938, "kind": "campaign_start", "cycles_used": 4, "budget": 8, "trials": ["ON", "OFF", "OFF"]}
+{"recorded_at": 1793960950.964598, "kind": "read_get_published", "action_time": 1793960950.964384, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793960951.173214, "kind": "read_response", "action_time": 1793960951.078867, "state": "OFF", "linkquality": 105, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793960961.178665, "kind": "read_get_published", "action_time": 1793960961.178447, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793960961.3811882, "kind": "read_response", "action_time": 1793960961.237468, "state": "OFF", "linkquality": 105, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793960961.3814259, "kind": "bulb_set_published", "value": "ON", "action_time": 1793960961.381362}
+{"recorded_at": 1793960961.691665, "kind": "bulb_set_feedback", "value": "ON", "action_time": 1793960961.487954}
+{"recorded_at": 1793960964.7513118, "kind": "read_get_published", "action_time": 1793960964.751051, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793960964.9574358, "kind": "read_response", "action_time": 1793960964.8601851, "state": "ON", "linkquality": 98, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793960974.966042, "kind": "read_get_published", "action_time": 1793960974.965782, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793960975.17223, "kind": "read_response", "action_time": 1793960975.028113, "state": "ON", "linkquality": 94, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793960975.17287, "kind": "cut_intent", "cycles_used": 5, "budget": 8}
+{"recorded_at": 1793960975.173013, "kind": "plug_set_published", "value": "OFF", "action_time": 1793960975.1729221}
+{"recorded_at": 1793960975.475799, "kind": "plug_feedback", "value": "OFF", "action_time": 1793960975.2954009}
+{"recorded_at": 1793961035.48701, "kind": "plug_set_published", "value": "ON", "action_time": 1793961035.486743}
+{"recorded_at": 1793961035.788395, "kind": "plug_feedback", "value": "ON", "action_time": 1793961035.6062999}
+{"recorded_at": 1793961035.78912, "kind": "read_get_published", "action_time": 1793961035.7890391, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961049.179096, "kind": "read_response", "action_time": 1793961049.127807, "state": "ON", "linkquality": 109, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961069.189903, "kind": "read_get_published", "action_time": 1793961069.189594, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961069.395287, "kind": "read_response", "action_time": 1793961069.248153, "state": "ON", "linkquality": 105, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961079.401855, "kind": "read_get_published", "action_time": 1793961079.401545, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961079.6055522, "kind": "read_response", "action_time": 1793961079.4662452, "state": "ON", "linkquality": 109, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961079.606247, "kind": "trial_complete", "trial": 1, "verdict": "OBSERVED_ON"}
+{"recorded_at": 1793961199.611713, "kind": "read_get_published", "action_time": 1793961199.611, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961199.813257, "kind": "read_response", "action_time": 1793961199.724642, "state": "ON", "linkquality": 80, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961209.82126, "kind": "read_get_published", "action_time": 1793961209.821172, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961210.024265, "kind": "read_response", "action_time": 1793961209.93117, "state": "ON", "linkquality": 98, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961210.024729, "kind": "bulb_set_published", "value": "OFF", "action_time": 1793961210.0246599}
+{"recorded_at": 1793961210.3300061, "kind": "bulb_set_feedback", "value": "OFF", "action_time": 1793961210.150017}
+{"recorded_at": 1793961213.3930361, "kind": "read_get_published", "action_time": 1793961213.392944, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961213.599437, "kind": "read_response", "action_time": 1793961213.5004191, "state": "OFF", "linkquality": 98, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961223.6103659, "kind": "read_get_published", "action_time": 1793961223.610244, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961223.815284, "kind": "read_response", "action_time": 1793961223.7204008, "state": "OFF", "linkquality": 102, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961223.816569, "kind": "cut_intent", "cycles_used": 6, "budget": 8}
+{"recorded_at": 1793961223.816689, "kind": "plug_set_published", "value": "OFF", "action_time": 1793961223.816643}
+{"recorded_at": 1793961224.1230981, "kind": "plug_feedback", "value": "OFF", "action_time": 1793961223.93222}
+{"recorded_at": 1793961284.12505, "kind": "plug_set_published", "value": "ON", "action_time": 1793961284.1246002}
+{"recorded_at": 1793961284.434041, "kind": "plug_feedback", "value": "ON", "action_time": 1793961284.239914}
+{"recorded_at": 1793961284.435411, "kind": "read_get_published", "action_time": 1793961284.4352798, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961297.630304, "kind": "read_response", "action_time": 1793961297.536423, "state": "ON", "linkquality": 102, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961317.64183, "kind": "read_get_published", "action_time": 1793961317.641332, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961317.852243, "kind": "read_response", "action_time": 1793961317.7034502, "state": "ON", "linkquality": 98, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961327.854922, "kind": "read_get_published", "action_time": 1793961327.8547719, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961328.060585, "kind": "read_response", "action_time": 1793961327.972728, "state": "ON", "linkquality": 102, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961328.0628061, "kind": "trial_complete", "trial": 2, "verdict": "OBSERVED_ON"}
+{"recorded_at": 1793961448.080134, "kind": "read_get_published", "action_time": 1793961448.079202, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961448.2879438, "kind": "read_response", "action_time": 1793961448.192606, "state": "ON", "linkquality": 98, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961458.2936761, "kind": "read_get_published", "action_time": 1793961458.293477, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961458.494101, "kind": "read_response", "action_time": 1793961458.397165, "state": "ON", "linkquality": 98, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961458.4943209, "kind": "bulb_set_published", "value": "OFF", "action_time": 1793961458.494227}
+{"recorded_at": 1793961458.802397, "kind": "bulb_set_feedback", "value": "OFF", "action_time": 1793961458.622802}
+{"recorded_at": 1793961461.8725162, "kind": "read_get_published", "action_time": 1793961461.8724601, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961462.0730848, "kind": "read_response", "action_time": 1793961461.978069, "state": "OFF", "linkquality": 98, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961472.085126, "kind": "read_get_published", "action_time": 1793961472.08449, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961472.28596, "kind": "read_response", "action_time": 1793961472.1894941, "state": "OFF", "linkquality": 98, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961472.287589, "kind": "cut_intent", "cycles_used": 7, "budget": 8}
+{"recorded_at": 1793961472.2877781, "kind": "plug_set_published", "value": "OFF", "action_time": 1793961472.2876852}
+{"recorded_at": 1793961472.592273, "kind": "plug_feedback", "value": "OFF", "action_time": 1793961472.404028}
+{"recorded_at": 1793961532.594207, "kind": "plug_set_published", "value": "ON", "action_time": 1793961532.593977}
+{"recorded_at": 1793961532.904851, "kind": "plug_feedback", "value": "ON", "action_time": 1793961532.733917}
+{"recorded_at": 1793961532.908467, "kind": "read_get_published", "action_time": 1793961532.9082172, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961546.274945, "kind": "read_response", "action_time": 1793961546.208312, "state": "ON", "linkquality": 109, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961566.2774122, "kind": "read_get_published", "action_time": 1793961566.277092, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961566.482927, "kind": "read_response", "action_time": 1793961566.38691, "state": "ON", "linkquality": 109, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961576.495595, "kind": "read_get_published", "action_time": 1793961576.495349, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961576.703008, "kind": "read_response", "action_time": 1793961576.5974138, "state": "ON", "linkquality": 109, "read_class": "device-originated (get-request attribution best effort; no ZCL TSN at MQTT boundary)"}
+{"recorded_at": 1793961576.704038, "kind": "trial_complete", "trial": 3, "verdict": "OBSERVED_ON"}
+{"recorded_at": 1793961576.705338, "kind": "plug_set_published", "value": "ON", "action_time": 1793961576.7051258}
+{"recorded_at": 1793961577.015821, "kind": "plug_feedback", "value": "ON", "action_time": 1793961576.814472}
+{"recorded_at": 1793961577.017697, "kind": "restore_verified", "attempt": 1}
+{"recorded_at": 1793961577.017925, "kind": "bulb_set_published", "value": "OFF", "action_time": 1793961577.01783}
+{"recorded_at": 1793961577.328187, "kind": "bulb_set_feedback", "value": "OFF", "action_time": 1793961577.14726}
