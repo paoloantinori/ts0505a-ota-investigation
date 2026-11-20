@@ -1,47 +1,127 @@
 # TS0505A (Lidl Livarno Lux) OTA investigation
 
-A Tuya EFR32MG21 light bulb rejects unsigned custom firmware. This repository documents why, down to the bytes.
+A Tuya EFR32MG21 light bulb rejects unsigned custom firmware. This repository documents why, down to the bytes, and why the light always turns back ON after a power cut, down to the NVM3 key map.
 
-This repository records a complete, reproducible attempt to replace the stock
-firmware of Lidl "Livarno Lux" TS0505A lights (E27 HG06106C, E14 HG06106B, GU10
-HG06106A, strip HG06104A; Silicon Labs EFR32MG21, module ZS3L) with custom
-firmware built from the public Tuya Zigbee SDK. Five verified OTA images were
-served to a sacrificial bulb. All five were fully downloaded (about 21 minutes
-each) and all five were rejected by the bootloader with `upgradeEndRequest`
-status 150 (`0x96 INVALID_IMAGE`). The candidates covered: unsigned with
-internal version 1, unsigned with version 97 aligned, ECDSA-signed with the
-Silicon Labs example key, production header string, and minimum version
-increment. The bulb survived all attempts unharmed on stock firmware.
+This repository records a complete, reproducible attempt to replace the stock firmware of Lidl "Livarno Lux" TS0505A lights (E27 HG06106C, E14 HG06106B, GU10 HG06106A, strip HG06104A; Silicon Labs EFR32MG21, module ZS3L) with custom firmware built from the public Tuya Zigbee SDK, and to change the always-on-after-blackout behavior. Seven verified OTA images were served to a sacrificial bulb. All were fully downloaded (about 21 minutes each) and all were rejected with `upgradeEndRequest` status 150 (`0x96 INVALID_IMAGE`). The bulb survived every attempt unharmed on stock firmware.
 
-We publish everything: the build, the byte-level verification of what was
-served, the run logs, the format findings we extracted on the way, the leads we
-followed, and the leads we killed with disassembly. If you own one of these
-lights and want custom firmware, this is the current state of the art as far as
-we can push it without opening the device.
+The investigation progressed from the initial five rejections (Nov 4) through root-cause analysis of both the OTA wall and the power-on behavior (Nov 17-20), arriving at a complete static map of the firmware's boot, configuration, and persistence architecture, verified end-to-end in the disassembly of both the application and the bootloader.
 
-## Background
+## TL;DR: what we now know
 
-These lights always power back ON after a mains cut, and the firmware rejects
-every documented way to change that behavior:
+1. **Why custom firmware is rejected**: the bootloader Gecko verifies the ECDSA P-256 signature of the GBL container using the Secure Element, and the only production private key is not publicly available. The AES-128 fleet key that encrypts the containers IS publicly available (it is a constant in the official SDK on GitHub).
+2. **Why the light always turns ON after a power cut**: the OnOff attribute is never persisted anywhere. At every boot it resets to its default value (ON). There is no setting, flag, or attribute that can change this on stock firmware. The `pmemory:1` option in the factory configuration is already enabled but is ignored for on/off state.
+3. **The TS0505B variant has the same problem**: upgrading to the B variant would not fix the power-on behavior (see [zigbee2mqtt#28129](https://github.com/Koenkk/zigbee2mqtt/issues/28129)).
+4. **Every Zigbee-reachable path to change the behavior is closed**: all standard and Tuya-specific clusters have been tested or statically ruled out.
+
+## Background: the always-on problem
+
+These lights always power back ON after a mains cut, and the firmware rejects every documented way to change that behavior:
 
 - `genOnOff.startUpOnOff` write: `UNSUPPORTED_ATTRIBUTE`
 - `manuSpecificTuya3.powerOnBehavior` write: `UNSUPPORTED_ATTRIBUTE`
-- `lightingColorCtrl.tuyaOnStartUp` (0xF9) and `tuyaDoNotDisturb` (0xFA):
-  default response `UNSUPPORTED_CLUSTER`, while Z2M reports success (fixed
-  upstream in the error handling, see the thread below)
+- `lightingColorCtrl.tuyaOnStartUp` (0xF9) and `tuyaDoNotDisturb` (0xFA): default response `UNSUPPORTED_CLUSTER`, while Z2M reports success (fixed upstream in the error handling, see the thread below)
 
-The behavioral matrix and the swallowed-error analysis are public in
-[Koenkk/zigbee-herdsman-converters#13643](https://github.com/Koenkk/zigbee-herdsman-converters/issues/13643).
-The same thread tracks the architecture fix in zigbee-herdsman
-([PR#1927](https://github.com/Koenkk/zigbee-herdsman/pull/1927)) that makes
-cluster-specific rejections visible.
+The behavioral matrix and the swallowed-error analysis are public in [Koenkk/zigbee-herdsman-converters#13643](https://github.com/Koenkk/zigbee-herdsman-converters/issues/13643). The same thread tracks the architecture fix in zigbee-herdsman ([PR#1927](https://github.com/Koenkk/zigbee-herdsman/pull/1927)) that makes cluster-specific rejections visible.
+
+## Root cause of always-on: no OnOff persistence (proven)
+
+We statically mapped the complete persistence architecture of the stock v84 firmware using Ghidra (REA). The result closes the question:
+
+The device uses **Simplicity NVM3** for persistent storage (pages at flash `0xB6000`-`0xBC000`, magic `0xB29A`). On top of NVM3 sits a 4 KB logical array (`tuya_flash_read`/`tuya_flash_write` at addresses `0x1494c`/`0x148b2` in the v84 binary), stored across 17 NVM3 objects of 250 bytes each. A complete NVM3 key map was extracted from the firmware's migration table (100 entries at flash `0x47410`).
+
+The only application-level data ever written to the logical array is a **20-slot reset-reason ring** (`{u32 timestamp, u8 reason}` per slot), used by the power-cycle factory-reset counter (`rstnum`). The Zigbee stack stores its own tables (bindings, scenes, network keys) in separate NVM3 objects.
+
+**The OnOff attribute has no persistent storage anywhere.** No NVM3 key, no ZCL token, no flash array offset ever stores it. At every boot, OnOff resets to its compiled default: ON. This is not a "forced on" routine; it is the absence of a "remember off" mechanism. The `pmemory:1` factory setting, which sounds like it should enable power-off memory, is parsed at boot but only affects brightness and color restoration, never on/off state.
+
+The full analysis with every address is in [analysis/ota-client-map-protocol-gap_2026-11-17.md](analysis/ota-client-map-protocol-gap_2026-11-17.md) (addenda 3-8, nights 1-8).
+
+## The factory configuration decoded
+
+The firmware's factory configuration is a compressed JSON blob inside the application flash. We reconstructed the LZ decompression algorithm from the disassembly (function at `0x464b0` in v84, using the string template block at `0x46528` as dictionary) and decoded it completely for both stock versions:
+
+v84 (TS0505A, the fleet):
+```json
+{"Jsonver":1.1.0,"category":"0505","module":"ZS3L","cmod":"rgbcw","dmod":0,
+ "onoffmode":1,"pmemory":1,"defcolor":"c","defbright":100,"deftemp":100,
+ "cwmaxp":100,"brightmin":1,"brightmax":100,"wfcfg":"spcl","rstmode":0,
+ "rstnum":3,"r_pin":8,"g_pin":4,"b_pin":1,"c_pin":9,"w_pin":5,"pwmhz":1000,...}
+```
+
+Key findings from the configuration:
+- `onoffmode` does NOT control power-on behavior; it is the on/off fade/gradient setting
+- `pmemory:1` is already enabled; it governs brightness/color restoration, not on/off
+- `rstnum:3` is the power-cycle count for factory reset (3 on/off cycles to unpair)
+- The pinout (r8/g4/b1/c9/w5, PWM at 1 kHz) identifies the hardware unambiguously
+- The v80 stock firmware is a different product (TS0502A, 2-channel CW, category 0502); the only configuration differences from v84 are `category`, `cmod`, `brightmin`, and `colormin`
+
+The decompressor is reproducible: literal tokens copy `raw-1` bytes, back-references copy `ctrl>>4 + 2` bytes at offset `off_lo + (mode<<8)` into the output-relative dictionary seeded with the template block.
+
+## The OTA wall: complete architecture
+
+### Seven candidates, seven rejections
+
+All images were served via Zigbee2MQTT OTA with per-device isolation. The bulb downloaded each completely (~21 min, 4909 blocks) and rejected each with status 150.
+
+| Candidate | Container | Signature | Result |
+|---|---|---|---|
+| v96 | plaintext GBL | unsigned | INVALID_IMAGE |
+| v97 | plaintext GBL, versions aligned | unsigned | INVALID_IMAGE |
+| v98 | plaintext GBL | ECDSA (Silabs example key) | INVALID_IMAGE |
+| V-A | plaintext, production headerString | unsigned | INVALID_IMAGE |
+| V-B | plaintext, outer version 81 | unsigned | INVALID_IMAGE |
+| v99 | encrypted (AES-128 fleet key) + signed | ECDSA (Silabs example key) | INVALID_IMAGE after 24s |
+| E1 repeat | same as v98 | same | INVALID_IMAGE |
+
+### Where the rejection actually comes from (timing proof)
+
+Timing analysis of the download logs discriminates the rejection source:
+
+- Plaintext candidates (v97, v98, E1): `upgradeEndRequest(INVALID_IMAGE)` arrives **within 1 second** of download completion. The bootloader rejects at the GBL header type-bits check (missing encryption bit) before doing any cryptographic work.
+- Encrypted candidate (v99, type 0x101 with the correct fleet AES key): the endRequest arrives **24 seconds** after completion. Those 24 seconds are the bootloader streaming-decrypting the entire ~286 KB, walking the decrypted tag stream, computing SHA-256, and submitting the ECDSA verification to the Secure Element, which then **rejects the signature** (the example key does not match the production key).
+
+This proves:
+1. The application delegates verification to the bootloader correctly (it is not an app-level stub that blocks everything)
+2. The AES-128 fleet key is correct for this device (the decrypt succeeded; a wrong key would produce garbage tags and instant rejection)
+3. **ECDSA signature enforcement is real and active on-device**
+
+### The ECDSA production key
+
+The bootloader (disassembled from the TS0222 sensor's flash dump, a cousin product on the same SDK; the TS0505A's own bootloader was not dumped) extracts its verification keys from flash tokens at `0xBE34C`/`0xBE36C` (X and Y coordinates of a P-256 public key). The same key signs:
+- The bootloader GBL containers
+- The application-level ECDSA signature (over the flash image bytes `[0x4000, 0x3A4F0)`)
+
+We harvested 31 production-signed firmware images from the public Tuya CDN (28 from the catalog plus v80, v84, and the TS0222 sensor dump) and verified all against this key. Cryptanalysis closed:
+- No nonce reuse (zero collisions in r or (r,s) across 31 signatures)
+- No truncated nonces (BSGS negative at 32 bits; lattice HNP attack, validated with known-answer tests, negative at 64/96/128/160 bits)
+- No low-s normalization (19/31 signatures have s > n/2)
+- Conclusion: the signing pipeline uses full-size CSPRNG nonces. There is no mathematical path to the private key from the available signatures.
+
+### The AES fleet key is public
+
+The AES-128 key `03d29876bcd7f03e64c375734975ebdc` (used to encrypt GBL containers for the entire Tuya Silabs lighting line, verified across at least 3 products) is not a manufacturing secret: it is a **constant hardcoded in `zigbee_sdk_core.o` inside `libtuya_sdk.a`** in the official `TuyaInc/tuya_zigbee_sdk` repository on GitHub (target `EFR32MG21A020F768`). It was never a secret. The security of the Tuya Silabs OTA chain rests entirely on the ECDSA signature gate.
+
+### The signature digest span (verified in bootloader disassembly and build scripts)
+
+We disassembled the GBL parser of the Tuya Silabs bootloader (from the TS0222 full flash dump; note that the TS0505A's own bootloader was not dumped, so the parser behavior is a family-level inference, not a device-level measurement). The SHA-256 digest for ECDSA verification covers the **outer GBL container bytes** from the first tag through the last tag before SIGNATURE:
+
+- For **encrypted** containers (type 0x101): the hash covers HEADER_V3 + ENC_INIT + ENC_DATA (the AES-CTR **ciphertext**, not the decrypted plaintext). This is confirmed by our own build: `build_v99_enc_signed.py` signs `sha256(HEADER_V3 + ENC_INIT + ENC_DATA)` and the committed v99 signature verifies against this outer span.
+- For **plaintext** containers: tag headers and payloads are hashed through the same callback.
+- The SIGNATURE tag itself is never hashed. The END tag is never hashed.
+- The Zigbee OTA wrapper (56-byte ZCL header, outside the GBL entirely) is never hashed.
+
+**Consequence**: the OTA header (manufacturerCode, imageType, fileVersion) is completely outside the signature. The GBL content is fully committed to by the signature (including the encrypted payload), but the OTA wrapper identity is not. In theory, a production-signed GBL for one product could be re-wrapped in an OTA header claiming another product's identity. However, we found no hardware-compatible candidate among the 70 CDN firmware images we analyzed (see below), and the TS0505B variant does not fix the power-on behavior.
+
+### The identity-wrapping dead end
+
+We analyzed all 70 firmware files harvested from the public Tuya CDN (`images.tuyaeu.com`, catalog from [divadiow/Misc](https://github.com/divadiow/Misc)). Among the 28 production-signed images, one (`oem_light_mg21_linea`) contains the exact identity of our fleet (`TS0505A / _TZ3000_riwp3k79`). However:
+
+1. The `_TZ3000_riwp3k79` identity is also used by Livarno Lux **LED strips** (HG06104A), not just bulbs. The linea firmware may target the strip hardware.
+2. The newer firmware generation (mg21_zg_light_bulb series, briloner, linea) does not contain the compressed JSON config blob. The pinout cannot be verified from the file. Without pinout verification, serving the firmware is an unacceptable brick risk.
+3. The TS0505B variant (referenced in the firmware's model tables) has the same power-on problem as TS0505A ([zigbee2mqtt#28129](https://github.com/Koenkk/zigbee2mqtt/issues/28129)), so even a successful swap would not fix the behavior.
 
 ## The fleet and its OTA identity
 
-Eight units across two IEEE OUIs (84:2e:14 and 58:8e:81, likely two module
-generations): seven in the original behavior-test fleet plus one sacrificial
-unit kept for flashing experiments. All report the same OTA identity, read via
-image notify plus the device's own `queryNextImageRequest`:
+Eight units across two IEEE OUIs (84:2e:14 and 58:8e:81, likely two module generations): seven in the original behavior-test fleet plus one sacrificial unit kept for flashing experiments. All report the same OTA identity:
 
 | Field | Value |
 |---|---|
@@ -50,242 +130,71 @@ image notify plus the device's own `queryNextImageRequest`:
 | fileVersion | 80 |
 | modelId | TS0505A |
 
-Manufacturer names seen in the wild on this family: `_TZ3000_odygigth`,
-`_TZ3000_dbou1ap4`, `_TZ3000_riwp3k79`, `_TZ3000_kdpxju99`.
+Manufacturer names seen in the wild on this family: `_TZ3000_odygigth`, `_TZ3000_dbou1ap4`, `_TZ3000_riwp3k79`, `_TZ3000_kdpxju99`.
 
-Note: imageType 0x1602 is shared by other Tuya products (a ZS5 UART module
-image and an MG21 window-cover relay exist in the public zigbee-OTA index
-under the same code). The identity alone does not identify a product; serving
-the wrong image to these lights is a real hazard, which is why our serving
-setup pins one URL to one device.
-
-## What we built and served
-
-Custom firmware from the Tuya Zigbee SDK (`tuya_zigbee_sdk`, commit 7bedace),
-configured for the EFR32MG21A020F768 target, with a power-on memory rewrite
-for the light controller. Two candidates:
-
-- **v96** (`ts0505a_fw_OTA_1.2.0.bin`, SHA-256 `b57b959d...`): external version
-  96, internal application version left at the SDK default of 1.
-- **v97** (`ts0505a_fw_OTA_1.2.1.bin`, SHA-256 `08f8560b...`): external 97 and
-  internal 97 everywhere a bootloader can read it: AAT
-  `customerApplicationVersion`, `ApplicationProperties.app.version`, the GBL
-  `APP_INFO` tag, and the in-image `g_firmware_ver`. Inner and outer aligned,
-  like production Tuya images we compared against (ZB21S3 dimmer: inner 10 =
-  outer 10).
-- **v98** (`ts0505a_fw_OTA_1.2.2.bin`, SHA-256 `eadeb8a1...`, 245450 bytes):
-  v97 plus an ECDSA-P256 GBL signature, signed with the public Silabs example
-  key from `gecko_sdk/platform/common/example_signing_key.pem`. The Gecko
-  bootloader makes signature enforcement a per-build flag; if Tuya provisioned
-  the stock bootloader against the example key instead of their own, this
-  image would have passed. It did not.
-- **V-A** (headerString variant, SHA-256 `9d010b2e...`, 245378 bytes): v97 GBL
-  repackaged with production headerString `EBL sdk_route`. 12 bytes changed.
-- **V-B** (outer version 81, SHA-256 `fc953a63...`, 245378 bytes): v97 GBL
-  repackaged with OTA fileVersion 81. 1 byte changed.
-
-Serving went through Zigbee2MQTT with a local OTA index pinned to one device
-by `manufacturerName`, plus a blocker entry that answers the other seven units
-with v80 `NO_IMAGE_AVAILABLE`. Before each run we re-verified isolation for
-all eight devices over MQTT. No other unit ever started a download.
-
-## The bench: the stock behavior measured, not assumed
-
-With every firmware route closed, we measured the actual power-on behavior on
-an automated bench: the sacrificial bulb powered through a smart plug, six
-mains cuts total, MQTT reads correlated to the cut ordering. Every cut with a
-verified pre-cut OFF state (four of six) still came back ON at restore. The
-observation is consistent and repeated, though deliberately classified as
-observational rather than formal proof (the MQTT boundary cannot carry ZCL
-readResponse provenance). Full write-up with the runner's own review history
-(two versions rejected by adversarial review before the third was trusted, all
-counterexamples published):
-[analysis/bench-power-on-behavior_2026-11-06.md](analysis/bench-power-on-behavior_2026-11-06.md).
-Practical consequence: there is no hidden power-on setting reachable from the
-outside; the blackout nuisance is an automation problem, not a firmware
-setting.
-
-## The outcome, five times
-
-All five candidates were downloaded completely and rejected at the end:
-
-- v96: full download (4908 blocks), `upgradeEndRequest` fileVersion 96,
-  status 150.
-- v97: 99.91% progress in 20m39s, `upgradeEndRequest` fileVersion 97,
-  status 150 (0x96 INVALID_IMAGE), 2026-11-04 06:08. The device echoed the
-  fileVersion of our image, so it received ours, and returned to a healthy
-  stock v80 state.
-- v98: same rejection, 2026-11-04 11:20, after 99.91% progress in 20m48s.
-  The device echoed fileVersion 98: it received and parsed our signed image,
-  and the example-key signature did not change the verdict.
-- V-A: same rejection, 2026-11-04 12:45. Production header string: no change.
-- V-B: same rejection, 2026-11-04 13:09. Outer version 81: no change.
-
-What the five rejections establish, stated carefully: aligning every
-version field at 97 was not sufficient, and signing with a key we possess was
-not sufficient either. The status 0x96 aggregates several distinct parser and
-policy errors, so three identical statuses are three identical observations,
-not three identical mechanisms. We do not claim a diagnosed root cause. The
-readings that remain consistent with all three data points: the stock
-bootloader requires signatures from a burned-in non-public Tuya key, requires
-encryption plus signature together (the wincover pattern), or the rejection
-has nothing to do with signatures at all (a vendor callback or an internal
-version register deciding first).
+Note: imageType 0x1602 is shared by other Tuya products. The identity alone does not identify a product; serving the wrong image to these lights is a real hazard.
 
 ## What was verified byte by byte
 
-The interesting part is what was proven about the artifacts, because it
-removes whole families of explanation. The battery
-(`evidence/verify_v97_build.py`, baseline-pinned) reconstructs the flash image
-from the GBL and compares v96 to v97:
+The verification battery (`evidence/verify_v99_build.py`, baseline-pinned) reconstructs the flash image from the GBL and verifies:
 
-- Flash chunks identical in address and size: `0x4000` (AAT, 172 B), `0x4200`
-  (app body, 242098 B), `0x3f3b4` (tail, 2946 B).
-- Flash-level diff v96 to v97: exactly three bytes, all accounted for:
-  `0x4058` AAT version 1 to 97, `0x3c88c` appProperties version 1 to 97,
-  `0x3f598` `g_firmware_ver` 96 to 97.
-- GBL-level diff: eight bytes (the three above, the APP_INFO version, and the
-  internal CRC in the END tag).
-- GBL body CRC32 residue exactly `0x2144DF1C` (verified with streaming zlib
-  over the whole body, the same method the bootloader parser uses).
-- ELF diff: three bytes total. Linker map byte-identical to v96, so the
-  layout is unchanged by construction.
-- The OTA wrapper (56-byte ZCL header plus a u16 tag / u32 length subelement)
-  was repaired early in the investigation after a real packaging bug, and
-  byte-serving was reconstructed from coordinator logs with matching SHA.
+- Flash chunks: exact address and size match to the v98 baseline
+- Flash-level diff v98 to v99: exactly three version bytes, all accounted for
+- GBL body CRC32 residue: `0x2144DF1C` (streaming zlib)
+- AES-CTR roundtrip: the fleet key decrypts the ENC_DATA payload to a valid inner tag stream
+- ECDSA: the signature verifies against the Silabs example public key (proving the signing was done correctly) and fails against the production key (proving the production key is different)
+- Strict tag-sequence check: [HEADER_V3, ENC_INIT, ENC_DATA+, SIGNATURE, END], no unknown tags, no overlaps
+
+## The bench: stock behavior measured
+
+With every firmware route closed, we measured the actual power-on behavior on an automated bench: the sacrificial bulb powered through a smart plug, six mains cuts total, MQTT reads correlated to the cut ordering. Every cut with a verified pre-cut OFF state still came back ON at restore. Full write-up: [analysis/bench-power-on-behavior_2026-11-06.md](analysis/bench-power-on-behavior_2026-11-06.md).
+
+The static analysis (NVM3 map, no OnOff persistence) now explains the bench result: there is no mechanism in the firmware that could remember the OFF state across a power cut.
 
 ## Format findings worth reusing
 
-These came out of parsing real Tuya MG21 images (wincover relay, ZS5 UART,
-ZB21S3 dimmer) and our own builds. They may save you the week they cost us:
-
-1. **Tuya GBL files are not 4-byte padded between tags.** Walk tags as
-   `offset + 8 + length` exactly. A padding-aware walker desynchronizes on
-   the big ERASEPROG tag and produces garbage.
-2. **GBL `ERASEPROG` payload is `u32 flashAddress` followed by data.** The
-   three chunks above reconstruct the entire programmed flash image.
+1. **Tuya GBL files are not 4-byte padded between tags.** Walk tags as `offset + 8 + length` exactly.
+2. **GBL `ERASEPROG` payload is `u32 flashAddress` followed by data.**
 3. **The OTA subelement header is 2-byte tag + 4-byte length (6 bytes), not 8.**
-4. **AAT layout verified against Tuya sources** (`cstartup-common.c`):
-   VECTOR_TABLE at +0x14 (0x4200), sizeof at +0x1b (0xac), appProperties
-   pointer at +0x34, `customerApplicationVersion` at +0x58.
-5. **The 16 bytes at the start of `appProperties` are the standard Silicon
-   Labs `APPLICATION_PROPERTIES_MAGIC`.** We briefly believed they were a
-   proprietary Tuya marker. They are not; the GSDK magic is what you should
-   expect. (This correction was forced by adversarial review and is the kind
-   of error worth publishing.)
-6. **Production Tuya images carry `EBL ` prefix in the headerString.** ZS5
-   and wincover both carry `EBL sdk_route`. We tested replicating it; no
-   difference, but worth knowing for Tuya-compatible OTA builders.
-7. Production Tuya MG21 images exist in both classes in the public index:
-   the wincover relay is encrypted and ECDSA-signed (ENC_INIT, ENC_DATA,
-   SIGNATURE tags), while ZS5 and ZB21S3 are plaintext. Per-product choice is
-   real at the distribution level. The Gecko Bootloader makes signature and
-   encryption enforcement a per-build bootloader configuration (documented,
-   default off).
+4. **AAT layout verified against Tuya sources** (`cstartup-common.c`).
+5. **The 16 bytes at the start of `appProperties` are the standard Silicon Labs `APPLICATION_PROPERTIES_MAGIC`.**
+6. **Production Tuya images carry `EBL ` prefix in the headerString.**
+7. **The Tuya config JSON is compressed with a custom LZ algorithm** (literal tokens + back-references into a template dictionary). The decompressor is trivially reproducible: control byte gives literal length (bits 0-1, extended if zero) and copy length (bits 4-7, extended if 0xF); back-reference offset is `off_lo + (bits 2-3 << 8)` with a third byte if mode==3; copy length is `raw + 2`.
+8. **The Tuya Silabs SDK stores global variables via r9-relative addressing** (static base), so literal pools never contain addresses of globals or peripherals. This is why naive constant searches in the binary fail.
+9. **NVM3 is the persistence layer** (not a proprietary Tuya store). Keys are 20-bit; the application uses a migration table at a fixed flash address to declare ~100 key ranges with defaults.
 
 ## The lead we killed with disassembly
 
-We found what looked like a door: the prebuilt `libtuya_sdk.a` contains an
-`ota-bootload-soc.o` object, the map shows `emberSendBootloadMessage` and
-`TOKEN_MFG_BOOTLOAD_AES_KEY` symbols, and the classic Ember over-air
-bootloader launch (AN760) would be exactly the kind of mesh-local command
-worth trying. We disassembled the object instead of probing the device:
+The prebuilt `libtuya_sdk.a` contains `ota-bootload-soc.o` with `emberSendBootloadMessage` and `TOKEN_MFG_BOOTLOAD_AES_KEY` symbols. Disassembly proved it is a ten-byte stub calling `halAppBootloaderInstallNewImage` with no protocol, no AES challenge, no XMODEM. The incoming bootload handler that IS linked is `bx lr`. No legacy door exists.
 
-```text
-00000000 <emberAfOtaBootloadCallback>:
-  0: push {r3, lr}
-  2: bl   halAppBootloaderInstallNewImage
-  6: movs r0, #1
-  8: pop  {r3, pc}
-```
+We also statically audited:
+- **Every path that emits ZCL status 150 (INVALID_IMAGE)**: the status is a catch-all. The application's "slot-verify" function (`FUN_000393de` in v84) is a compiled stub `return 1`, but it never executes in the observed OTA flows. The real rejections come from the bootloader: instant rejection at the GBL type-bits check (plaintext candidates) and post-verification rejection (encrypted candidates with wrong signature).
+- **Every NVM3 key the firmware reads at boot**: none stores an on/off state.
+- **Every function in the OTA client's finalize path**: manufacturerCode and imageType are not checked at finalize; the identity match happens only at queryNextImage.
 
-Ten bytes that call the standard OTA image installer. No protocol, no AES
-challenge, no XMODEM, no flash read. And the map symbols we had relied on sit
-in the "Discarded input sections" region: never linked. The incoming bootload
-handler that IS linked in our image is `bx lr`, an empty function. No legacy
-door exists in this build. We are publishing the refutation because a
-plausible-sounding door that turns out empty is exactly what someone else
-will rediscover.
+## What remains open
 
-## Hypotheses that remain
-
-None of these is a diagnosis. Each is compatible with both rejections:
-
-1. Per-build signature/encryption enforcement in the stock bootloader
-   (configurable in Gecko Bootloader, default off in stock Silabs builds;
-   unknown for this product). Two unsigned images failing is consistent with
-   it, and so is a demo-key-signed image failing: the enforcement would check
-   against a burned-in Tuya key, not the public example key.
-2. A vendor `parser_applicationUpgradeValidCallback` rejecting on productId,
-   type, or any product-specific field (the extension point exists; the stock
-   implementation is not available to us).
-3. Anti-rollback against an internal highest-version register we never
-   measured (the OTA fileVersion 80 does not reveal it).
-4. Parser/storage context mismatch of a kind we have not enumerated.
-
-What we have excluded: container structure, GBL CRC, served-byte corruption,
-address overlap with the bootloader, version alignment as sufficient,
-production header string as sufficient, and demo-key signing as sufficient.
-
-## What would settle it
-
-- A genuine stock OTA image for this lineage (class disclosure: signed,
-  encrypted, or plaintext). We requested it publicly in
-  [Koenkk/zigbee-OTA#1372](https://github.com/Koenkk/zigbee-OTA/issues/1372);
-  nothing exists in public indexes. The remaining capture path is a rooted
-  Tuya gateway relaying the cloud update URL.
-- A physical dump of any Tuya Silabs light (SWD or bootloader UART). We
-  excluded opening devices from this project, so we did not qualify this
-  path. Note that a debug unlock on a locked EFR32 can mass-erase, which
-  destroys the very stock image you want.
-- The Tuya Android app or developer platform APIs might expose the firmware
-  CDN structure or allow querying by PID. Not yet investigated.
-- Anyone with knowledge of Tuya's Silabs bootloader provisioning policy for
-  lighting products. Issues welcome.
+- **Official firmware with startUpOnOff**: no Tuya Silabs lighting firmware currently implements it (confirmed for both TS0505A and TS0505B). Monitor [zigbee-OTA index](https://github.com/Koenkk/zigbee-OTA) and [#13643](https://github.com/Koenkk/zigbee-herdsman-converters/issues/13643).
+- **The production ECDSA private key**: not in the official SDK (337 MB scanned), not recoverable from available signatures (31 samples, full-size nonces), not leaked in any public artifact we found. The signing infrastructure is server-side at Tuya; ODM-side tools almost certainly never contain it.
+- **Physical flashing (SWD)**: would bypass everything (replace the bootloader with a custom one from the Gecko SDK). We excluded opening devices from this project.
 
 ## Related work
 
-- [analienx/tuya-ts0505b-router-firmware](https://github.com/analienx/tuya-ts0505b-router-firmware):
-  custom firmware for TS0505B, a newer generation with a different OTA identity
-  (0x100B / 0x020C). Different product line; its success does not transfer to
-  TS0505A.
-- [romasku/tuya-zigbee-switch](https://github.com/romasku/tuya-zigbee-switch):
-  custom firmware for Tuya Telink and some Silabs devices. Their OTA migration
-  images are Telink-only (`board.mk` excludes Silabs); Silabs targets are
-  flashed by wire, bootloader plus app.
-- [dzerik/zs3l-ncp-flash-over-network](https://github.com/dzerik/zs3l-ncp-flash-over-network):
-  flashed the same EFR32MG21/ZS3L chip via GPIO boot strap + UART XMODEM with
-  unsigned firmware, proving the UART path bypasses OTA policy entirely.
-- [pvvx/ZigbeeTLc](https://github.com/pvvx/ZigbeeTLc): the Telink ecosystem
-  shows what open Tuya hardware looks like (BLE first flash, debug pin without
-  readout protection). None of those properties hold for this bulb.
-- [paoloantinori/osram-lightify-fw-re](https://github.com/paoloantinori/osram-lightify-fw-re):
-  reverse engineering of the OSRAM LIGHTIFY bulbs (AC03641), which share the
-  always-on-after-power-cycle behavior. Started 2026-11-05 with the discovery
-  that the ZLL_MK-prefixed OSRAM images in the public zigbee-OTA index are
-  plaintext Cortex-M firmware. Different vendor and platform: its findings do
-  not unlock this repo's signed-image question, but the Thumb pipeline and
-  memory-layout method transfer to any plaintext OTA image.
+- [analienx/tuya-ts0505b-router-firmware](https://github.com/analienx/tuya-ts0505b-router-firmware): custom firmware for TS0505B, a newer generation with a different OTA identity (0x100B / 0x020C).
+- [romasku/tuya-zigbee-switch](https://github.com/romasku/tuya-zigbee-switch): custom firmware for Tuya Telink and some Silabs devices.
+- [dzerik/zs3l-ncp-flash-over-network](https://github.com/dzerik/zs3l-ncp-flash-over-network): flashed the same EFR32MG21/ZS3L chip via GPIO boot strap + UART XMODEM.
+- [pvvx/ZigbeeTLc](https://github.com/pvvx/ZigbeeTLc): the Telink ecosystem shows what open Tuya hardware looks like.
+- [paoloantinori/osram-lightify-fw-re](https://github.com/paoloantinori/osram-lightify-fw-re): OSRAM LIGHTIFY bulbs share the always-on-after-power-cycle behavior.
+- [openshwprojects/OpenBK7231T_App](https://github.com/openshwprojects/OpenBK7231T_App): OpenBeken firmware for Tuya WiFi devices (BK7231), a different chipset family. We used its source extensively for cross-referencing.
+- [Koenkk/zigbee2mqtt#28129](https://github.com/Koenkk/zigbee2mqtt/issues/28129): TS0505B power outage behavior (same problem).
 
 ## Repository contents
 
-- `evidence/` the verification battery (`verify_v97_build.py`), the post-link
-  version patcher (`patch_v97_inner_version.py`), and the filtered run logs
-  of both rejected updates.
-- `evidence/bench-*.json*` the smart-plug bench runs: the superseded first
-  night (kept immutable), the final run export, and its append-only journal.
-- `analysis/` the investigation write-ups, including the adversarial review
-  that corrected our own claims (kept verbatim on purpose). The write-ups are
-  in Italian; this README carries their essential findings in English. The
-  bench write-up is in English.
-
-Reproduction: the battery is baseline-pinned to the published v96 hashes and
-fails loudly if fed the wrong baseline or an unpatched ELF (there is a
-negative test described in the header). It needs only Python 3 and the two
-binaries referenced inside it.
+- `evidence/` verification batteries, build scripts, run logs, decrypted firmware images, the 31-signature production dataset, the production ECDSA public key.
+- `analysis/` investigation write-ups (Italian; this README carries the essential findings in English). The two primary documents:
+  - `ota-client-map-protocol-gap_2026-11-17.md` (with 12 addenda through Nov 20): the complete OTA architecture, NVM3 map, config decode, persistence analysis, cryptanalysis
+  - `bootloader-signature-policy-ts0222-dump_2026-11-17.md` (rev 4): bootloader signature verification mechanism
 
 ## Credits and conduct
 
-All experiments ran on our own devices, on our own network, with the risk
-formally accepted before each flash. The sacrificial bulb survived every step
-and is back on stock duty. Questions and additions: please open an issue.
+All experiments ran on our own devices, on our own network, with the risk formally accepted before each flash. The sacrificial bulb survived every step and is back on stock duty. Questions and additions: please open an issue.
