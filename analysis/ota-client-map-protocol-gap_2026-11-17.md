@@ -383,3 +383,52 @@ La nuova generazione SDK non usa il JSON compresso: la configurazione (pinout PW
 2. Il firmware linea ha GIA' la nostra identita' (non servirebbe nemmeno il wrapper incapsulato: potrebbe funzionare direttamente).
 3. MA: pinout non verificabile = rischio brick non eliminabile.
 4. Prossimo passo possibile per verificare il pinout: reverse engineering del codice di inizializzazione PWM nel firmware linea (cercare le costanti GPIO nel codice, non nel JSON). Oppure: cercare nella documentazione Z2M del modello specifico che usa questo firmware.
+
+
+## Addendum 2026-11-22: forum Silabs sistematico (researcher) + valutazione impatto lane
+
+### I 4 fatti estratti (con fonte)
+
+1. **SE aggiornabile via OTA**: il firmware del Secure Element viaggia in un GBL applicato dal Gecko Bootloader. Le immagini SE sono prodotte e firmate da Silabs, la SE verifica con la propria chiave interna. Ma il canale esiste: la domanda aperta e' se un'immagine SE piu' vecchia o piu' nuova modifichi il comportamento della verifica.
+
+2. **Le chiavi NON viaggiano via OTA** (dichiarazione di un employee Silabs a nome dei security expert, thread MG24): sono provisionate in produzione via commander in OTP/token/lock-bits. La chiave pubblica e' in token leggibili (MFG_SIGNED_BOOTLOADER_KEY_X/Y via commander tokens read).
+
+3. **L'enforcement e' compile-time, non fused in hardware** (thread Okada): il comportamento "richiedi firmato/cifrato" vive nel binario del bootloader come flag di compilazione (BOOTLOADER_ENFORCE_SIGNED_UPGRADE). Se il bootloader Tuya e' compilato senza quel flag, i GBL non firmati si installano.
+
+4. **Senza Secure Debug Lock (AN1190), la flash e' leggibile via SWD** (employee conferma). Su lampadine consumer da 5 euro e' plausibile che Tuya non l'abbia attivato.
+
+Bonus: **signatureType e signatureLocation sono metadata dentro l'immagine**, scritti da commander e letti dal bootloader. Silabs non ha risposto se pre-impostarli sia sicuro. Potenziale debolezza: il verificatore potrebbe affidarsi a metadata controllabili dall'attaccante.
+
+### Valutazione impatto sulla lane
+
+**Fatto 3 (enforcement compile-time)**: e' il piu' subito azionabile. Abbiamo gia' il bootloader TS0222 decifrato e aperto in REA. Il nostro analysis-policy-doc ha GIA' stabilito che il parser TS0222 richiede i bit di cifratura+firma (RITORNO 0x100a in assenza). Quindi enforcement E' attivo nel TS0222. La domanda per la TS0505A resta aperta (inferenza di famiglia, non measurement diretta). Nessuna azione nuova necessaria: il dato conferma che il nostro approccio era corretto.
+
+**Fatto 2 (chiavi in token)**: coerente con la nostra estrazione della chiave pubblica dai token a 0xBE34C/0xBE36C. Conferma che la chiave e' fisicamente in ogni lampadina e leggibile via SWD read-only. MA: il vincolo del maintainer vieta ogni lavoro fisico sulle lampadine, quindi questo resta un'informazione, non un'azione.
+
+**Fatto 1 (SE aggiornabile)**: apre una domanda nuova. Se il firmware SE e' aggiornabile via GBL, e se un'immagine SE differente modifica il comportamento di verifica... questo e' un nuovo vettore da esplorare. Tuttavia: le immagini SE sono firmate da Silabs con una chiave diversa dalla chiave Tuya production. Servirebbe un'immagine SE Silabs legittima che modifichi il comportamento in modo utile. Probabilita' bassa ma non nulla.
+
+**Fatto 4 (debug lock)**: conferma la fattibilita' del dump via SWD, che pero' resta vietato dal maintainer.
+
+**Bonus (signatureType/signatureLocation come metadata)**: da verificare nei sorgenti btl_bootload.c del Gecko SDK. Se il bootloader legge questi campi dall'immagine per decidere COME verificare, e se un attaccante puo' pre-impostarli, questo potrebbe essere un vettore di attacco. Da aggiungere alla lista di verifiche.
+
+### Aggiornamento cron job
+Il researcher ha aggiornato il prompt del cron job 50f377f86403 per evitare duplicazioni: ora contiene l'elenco di quanto gia' coperto e cerchera' solo contenuto nuovo.
+
+
+### Follow-up stessa giornata: verifica a livello di sorgente del punto metadata (bonus)
+
+Ho interrogato l'indice del sorgente Gecko SDK (SiliconLabs/gecko_sdk via DeepWiki) sulla gestione di signatureType/signatureLocation nel parser GBL. Esito: **l'ipotesi di debolezza e' REFUTATA per la via OTA**.
+
+Fatti dal sorgente (`platform/bootloader/parser/gbl/btl_gbl_parser.c`, `platform/bootloader/core/btl_bootload.c`):
+
+1. Il parser GBL NON usa `APPLICATION_PROPERTIES.signatureType` ne' `.signatureLocation` per la verifica del tag SIGNATURE. `parser_checkSignature()` legge esattamente 64 byte dal payload del tag SIGNATURE, finalizza lo SHA-256 accumulato sui dati GBL precedenti e verifica. Offset e tipo sono fissati dal parser, non da metadata controllabili dall'attaccante.
+
+2. I campi signatureType/signatureLocation esistono solo nell'altro percorso, quello di secure boot su flash applicativa (`bootload_verifyApplication`): quando il secure boot NON e' enforced, il percorso app puo' ramificare su `appProperties->signatureType` e usare `signatureLocation`. Ma sono campi della flash applicativa scritti dal contenuto GBL stesso: in un contenitore cifrato quel contenuto e' committed dalla firma ECDSA, quindi non e' un vettore.
+
+3. Conferma indipendente del nostro span del digest: il tag SIGNATURE e' marcato sempre non-cifrato, i suoi byte NON entrano nell'hash (l'header del tag e' escluso), l'hash copre i dati GBL che precedono la firma. Coincide con la lettura fatta sul disassembly TS0222 e con la build v99 che verifica.
+
+4. Conferma del fatto 3 del forum, a livello di sorgente: l'enforcement vive in `BOOTLOADER_ENFORCE_SIGNED_UPGRADE` / `BOOTLOADER_ENFORCE_ENCRYPTED_UPGRADE`, mappati sui requisiti del parser `PARSER_REQUIRE_AUTHENTICITY` / `PARSER_REQUIRE_CONFIDENTIALITY`. Il parser rifiuta l'header senza il bit firma se l'autenticita' e' richiesta, rifiuta GBL non cifrati se la confidenzialita' e' richiesta, e a fine parsing restituisce `BOOTLOADER_ERROR_PARSER_SIGNATURE` cancellando `imageVerified` se la firma manca. Le config Series 2 di default hanno entrambi i flag a 0; la build Tuya li ha a 1, ed e' esattamente cio' che le prove di timing hanno misurato sul device (rifiuto istantaneo dei candidati plaintext al check dei type-bit = PARSER_REQUIRE_CONFIDENTIALITY; rifiuto a 24s dei cifrati = verifica ECDSA fallita).
+
+Fonte: DeepWiki su SiliconLabs/gecko_sdk, risposta con riferimenti a btl_gbl_parser.c e btl_bootload.c (deepwiki.com/search/10725348-a4b1-47f4-a304-b14e36a05a7a).
+
+**Conclusione**: il punto aperto signatureType/signatureLocation e' chiuso. Nessuna via metadata-controlabile nella catena OTA. La lane resta chiusa sui binari noti: chiave production non pubblica, enforcement attivo.
